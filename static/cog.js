@@ -882,9 +882,11 @@
 
   document.addEventListener("pointerover", function (e) {
     var a = e.target.closest && e.target.closest("a[data-help]");
-    if (!a || a === helpFor || e.pointerType === "touch") return;
-    clearTimeout(helpShowTimer);
+    if (!a || e.pointerType === "touch") return;
+    // Back onto the icon from its popover: keep it.
     clearTimeout(helpHideTimer);
+    if (a === helpFor) return;
+    clearTimeout(helpShowTimer);
     helpShowTimer = setTimeout(function () {
       showHelp(a);
     }, 250);
