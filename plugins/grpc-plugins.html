@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>gRPC Plugins — Cog Documentation</title>
+<style>
+:root {
+  --sidebar-w: 260px;
+  --fg: #1a1a2e;
+  --bg: #fff;
+  --sidebar-bg: #f5f6f8;
+  --sidebar-border: #e0e0e0;
+  --link: #2563eb;
+  --link-hover: #1d4ed8;
+  --active-bg: #e0e7ff;
+  --active-fg: #1e40af;
+  --code-bg: #f4f4f5;
+  --pre-bg: #272822;
+  --pre-fg: #f8f8f2;
+  --table-border: #d1d5db;
+  --table-stripe: #f9fafb;
+  --heading: #111827;
+  --muted: #6b7280;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: #e5e7eb;
+    --bg: #111827;
+    --sidebar-bg: #1f2937;
+    --sidebar-border: #374151;
+    --link: #60a5fa;
+    --link-hover: #93bbfd;
+    --active-bg: #1e3a5f;
+    --active-fg: #93bbfd;
+    --code-bg: #1f2937;
+    --pre-bg: #0d1117;
+    --pre-fg: #e6edf3;
+    --table-border: #374151;
+    --table-stripe: #1f2937;
+    --heading: #f9fafb;
+    --muted: #9ca3af;
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+  line-height: 1.6;
+}
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+ 
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  overflow-y: auto;
+  padding: 1.5rem 0;
+  z-index: 10;
+}
+.content {
+  margin-left: var(--sidebar-w);
+  max-width: 52rem;
+  padding: 2rem 2.5rem;
+}
+
+ 
+.sidebar .logo {
+  padding: 0 1.25rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+.sidebar .logo a { color: inherit; }
+.sidebar .section-label {
+  padding: 0.75rem 1.25rem 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.sidebar ul { list-style: none; }
+.sidebar li a {
+  display: block;
+  padding: 0.25rem 1.25rem 0.25rem 1.75rem;
+  font-size: 0.875rem;
+  color: var(--fg);
+  border-left: 3px solid transparent;
+}
+.sidebar li a:hover {
+  background: var(--active-bg);
+  text-decoration: none;
+}
+.sidebar li a.active {
+  background: var(--active-bg);
+  color: var(--active-fg);
+  border-left-color: var(--active-fg);
+  font-weight: 600;
+}
+
+ 
+.menu-toggle { display: none; }
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); transition: transform 0.2s; }
+  .sidebar.open { transform: translateX(0); }
+  .content { margin-left: 0; padding: 1rem; }
+  .menu-toggle {
+    display: block; position: fixed; top: 0.75rem; left: 0.75rem;
+    z-index: 20; background: var(--sidebar-bg); border: 1px solid var(--sidebar-border);
+    border-radius: 4px; padding: 0.4rem 0.6rem; cursor: pointer;
+    font-size: 1.25rem; color: var(--fg); line-height: 1;
+  }
+}
+
+ 
+.content h1 { font-size: 2rem; margin: 0 0 1rem; color: var(--heading); }
+.content h2 { font-size: 1.4rem; margin: 2rem 0 0.75rem; color: var(--heading); border-bottom: 1px solid var(--sidebar-border); padding-bottom: 0.3rem; }
+.content h3 { font-size: 1.15rem; margin: 1.5rem 0 0.5rem; color: var(--heading); }
+.content h4 { font-size: 1rem; margin: 1.25rem 0 0.5rem; color: var(--heading); }
+.content p { margin: 0.75rem 0; }
+.content ul, .content ol { margin: 0.75rem 0; padding-left: 1.5rem; }
+.content li { margin: 0.25rem 0; }
+.content blockquote {
+  border-left: 3px solid var(--link);
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+  color: var(--muted);
+  background: var(--code-bg);
+}
+.content code {
+  background: var(--code-bg);
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+.content pre {
+  background: var(--pre-bg);
+  color: var(--pre-fg);
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 1rem 0;
+  line-height: 1.5;
+}
+.content pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.85rem;
+}
+.content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+.content th, .content td {
+  border: 1px solid var(--table-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.content th { background: var(--sidebar-bg); font-weight: 600; }
+.content tr:nth-child(even) { background: var(--table-stripe); }
+.content hr { border: none; border-top: 1px solid var(--sidebar-border); margin: 2rem 0; }
+.content img { max-width: 100%; }
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+<nav class="sidebar">
+  <div class="logo"><a href="../index.html">Cog</a></div>
+  
+  <div class="section-label">Getting Started</div>
+  <ul>
+    
+    <li><a href="../getting-started/configuration.html">Configuration</a></li>
+    
+    <li><a href="../getting-started/first-run.html">First Run</a></li>
+    
+    <li><a href="../getting-started/installation.html">Installation</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Administration</div>
+  <ul>
+    
+    <li><a href="../admin/backup.html">Backup and Restore</a></li>
+    
+    <li><a href="../admin/cli.html">CLI Reference</a></li>
+    
+    <li><a href="../admin/email.html">Email Configuration</a></li>
+    
+    <li><a href="../admin/https.html">Reaching Cog from Anywhere</a></li>
+    
+    <li><a href="../admin/reverse-proxy.html">Reverse Proxy</a></li>
+    
+    <li><a href="../admin/updates.html">Updates</a></li>
+    
+    <li><a href="../admin/users-and-groups.html">Users and Groups</a></li>
+    
+    <li><a href="../admin/volumes.html">Volumes</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Using Cog</div>
+  <ul>
+    
+    <li><a href="../using-cog/app-passwords.html">App Passwords</a></li>
+    
+    <li><a href="../using-cog/files.html">Files</a></li>
+    
+    <li><a href="../using-cog/mfa.html">Multi-Factor Authentication</a></li>
+    
+    <li><a href="../using-cog/sftp.html">SFTP</a></li>
+    
+    <li><a href="../using-cog/search.html">Search</a></li>
+    
+    <li><a href="../using-cog/sharing.html">Sharing</a></li>
+    
+    <li><a href="../using-cog/webdav.html">WebDAV</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Apps</div>
+  <ul>
+    
+    <li><a href="../apps/bookmarks.html">Bookmarks</a></li>
+    
+    <li><a href="../apps/calendar.html">Calendar</a></li>
+    
+    <li><a href="../apps/contacts.html">Contacts</a></li>
+    
+    <li><a href="../apps/dashboard.html">Dashboard</a></li>
+    
+    <li><a href="../apps/gallery.html">Gallery</a></li>
+    
+    <li><a href="../apps/notes.html">Notes</a></li>
+    
+    <li><a href="../apps/rss.html">RSS / News</a></li>
+    
+    <li><a href="../apps/tasks.html">Tasks</a></li>
+    
+  </ul>
+  
+  <div class="section-label">NextCloud</div>
+  <ul>
+    
+    <li><a href="../nextcloud/clients.html">Compatible Clients</a></li>
+    
+    <li><a href="../nextcloud/login-flow.html">Login Flow v2</a></li>
+    
+    <li><a href="../nextcloud/overview.html">NextCloud Compatibility</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Plugin Development</div>
+  <ul>
+    
+    <li><a href="../plugins/cli-commands.html">CLI Commands</a></li>
+    
+    <li><a href="../plugins/custom-builds.html">Custom Builds</a></li>
+    
+    <li><a href="../plugins/getting-started.html">Getting Started with Plugin Development</a></li>
+    
+    <li><a href="../plugins/databases.html">Plugin Databases</a></li>
+    
+    <li><a href="../plugins/plugin-interface.html">Plugin Interface Reference</a></li>
+    
+    <li><a href="../plugins/overview.html">Plugin System Overview</a></li>
+    
+    <li><a href="../plugins/registration.html">Registration</a></li>
+    
+    <li><a href="../plugins/search.html">Search Indexing</a></li>
+    
+    <li><a href="../plugins/settings.html">Settings Pages</a></li>
+    
+    <li><a href="../plugins/sharing.html">Sharing Resources</a></li>
+    
+    <li><a href="../plugins/grpc-plugins.html" class="active">gRPC Plugins</a></li>
+    
+  </ul>
+  
+</nav>
+<main class="content">
+<h1 id="grpc-plugins">gRPC Plugins</h1>
+<p>External plugins run as separate processes and communicate with Cog over gRPC on a Unix socket.</p>
+<h2 id="building-a-grpc-plugin">Building a gRPC plugin</h2>
+<p>Create a standard Go binary that calls <code>plugcmd.Run()</code>:</p>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;context&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;git.duckfam.us/jj-software/cog/plugin&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;git.duckfam.us/jj-software/cog/plugin/plugcmd&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">myPlugin</span> <span style="color:#66d9ef">struct</span>{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">p</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">myPlugin</span>) <span style="color:#a6e22e">ID</span>() <span style="color:#66d9ef">string</span> { <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;myplugin&#34;</span> }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">p</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">myPlugin</span>) <span style="color:#a6e22e">Register</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">plugin</span>.<span style="color:#a6e22e">PluginContext</span>) <span style="color:#66d9ef">error</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">RegisterNavItem</span>(<span style="color:#a6e22e">plugin</span>.<span style="color:#a6e22e">NavItem</span>{
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Label</span>: <span style="color:#e6db74">&#34;My Plugin&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">URL</span>:   <span style="color:#e6db74">&#34;/apps/myplugin&#34;</span>,
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">RegisterPage</span>(<span style="color:#e6db74">&#34;{$}&#34;</span>, <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;&lt;h1&gt;Hello from gRPC plugin!&lt;/h1&gt;&#34;</span>)
+</span></span><span style="display:flex;"><span>    }))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">p</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">myPlugin</span>) <span style="color:#a6e22e">Start</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>) <span style="color:#66d9ef">error</span> { <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span> }
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">p</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">myPlugin</span>) <span style="color:#a6e22e">Stop</span>() <span style="color:#66d9ef">error</span>                     { <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span> }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">plugcmd</span>.<span style="color:#a6e22e">Run</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">myPlugin</span>{})
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>Build it as a standalone binary:</p>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span>go build -o myplugin ./cmd/myplugin
+</span></span></code></pre><h2 id="how-it-works">How it works</h2>
+<ol>
+<li>Cog creates a temporary Unix socket</li>
+<li>Cog launches your binary with <code>COG_PLUGIN_SOCKET</code> set to the socket path</li>
+<li>Your process serves <code>plugpb.PluginService</code> on that socket — in Go, <code>plugcmd.Run()</code> does this</li>
+<li>Cog connects and calls <code>GetID</code> to learn the plugin ID</li>
+<li>Cog calls <code>Register</code>, which streams registration events (routes, nav items, widgets, etc.)</li>
+<li>HTTP requests to your routes are proxied over gRPC</li>
+</ol>
+<p>The protocol is the contract, not the Go SDK: any language that can serve <code>plugin/plugpb/plugin.proto</code> over a Unix socket can be a plugin. The examples here are Go because <code>plugcmd</code> is what the tree ships.</p>
+<h2 id="supported-registrations">Supported registrations</h2>
+<p>The following work over gRPC:</p>
+<ul>
+<li><code>RegisterPage</code> -- pages are proxied as HTTP requests</li>
+<li><code>RegisterAPI</code> -- API endpoints are proxied</li>
+<li><code>RegisterAction</code> -- actions are proxied with CSRF handling</li>
+<li><code>RegisterNavItem</code> -- navigation entries</li>
+<li><code>RegisterWidget</code> -- dashboard widgets (rendered via gRPC call)</li>
+<li><code>RegisterHook</code> -- hook subscriptions (fire-and-forget)</li>
+<li><code>RegisterResource</code> -- shareable resources</li>
+</ul>
+<h2 id="limitations">Limitations</h2>
+<p>The following are <strong>not available</strong> to gRPC plugins:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PluginDB()</code></td>
+<td>Database access is not proxied over gRPC</td>
+</tr>
+<tr>
+<td><code>RootDB()</code></td>
+<td>Same</td>
+</tr>
+<tr>
+<td><code>UserFilesDir()</code></td>
+<td>Filesystem paths are not meaningful across processes</td>
+</tr>
+<tr>
+<td><code>UserVFS()</code></td>
+<td>VFS is not proxied</td>
+</tr>
+<tr>
+<td><code>RegisterDAVHandler()</code></td>
+<td>No-op for gRPC plugins</td>
+</tr>
+<tr>
+<td><code>RegisterSettingsPage()</code></td>
+<td>No-op for gRPC plugins</td>
+</tr>
+<tr>
+<td><code>RegisterCommand()</code></td>
+<td>No-op for gRPC plugins</td>
+</tr>
+<tr>
+<td><code>RegisterSearchSource()</code></td>
+<td>Not yet supported over gRPC</td>
+</tr>
+<tr>
+<td><code>ShareStore()</code></td>
+<td>Returns nil</td>
+</tr>
+<tr>
+<td><code>EmailSender()</code></td>
+<td>Returns nil</td>
+</tr>
+<tr>
+<td><code>CSRFSecret()</code></td>
+<td>Returns nil</td>
+</tr>
+</tbody>
+</table>
+<p>gRPC plugins should use their registered API/action routes for all data access, or manage their own local storage.</p>
+<h2 id="installation">Installation</h2>
+<p>Place compiled plugin binaries in <code>/var/lib/cog/plugins/</code>. The Cog host discovers and loads them via <code>Registry.LoadExternal()</code>.</p>
+<h2 id="process-isolation">Process isolation</h2>
+<p>A gRPC plugin is a process that serves <code>plugpb.PluginService</code> on the socket named by <code>COG_PLUGIN_SOCKET</code>. Nothing about that requires Go or an import of Cog; <code>plugcmd</code> is one implementation of the server side, and everything in this section applies to any other.</p>
+<h3 id="what-the-host-does">What the host does</h3>
+<p><strong>It captures your output.</strong> The host reads the process's stdout and stderr and re-emits them line by line through its own logger, attributed to your plugin ID — stdout at INFO, stderr at ERROR. A crash message therefore reaches the admin log viewer (Admin → Logs) and not just the host's stderr. Two consequences worth designing around: write ordinary logs to stdout, because anything on stderr is recorded as an error regardless of what you think its level is; and write a line at a time, because that is the unit the host logs. Structured output is not parsed — a JSON log line is recorded as its text.</p>
+<p><strong>It restarts a process that exits.</strong> The host waits on the process, and when it exits — cleanly or not — relaunches it on a fresh socket, backing off from 1s to a maximum of 30s between attempts, and keeps trying until the server shuts down. While the plugin is down its routes answer 503 with a short &quot;temporarily unavailable&quot; page instead of leaking a dial error to the browser. A request that fails for any other reason gets a 500. Either way the underlying status is logged, not rendered.</p>
+<p><strong>It requires you to come back the same.</strong> Routes are mounted on the host's mux once, at load, and cannot be remounted, so a restarted process must be the plugin the host already mounted routes for:</p>
+<ul>
+<li><code>GetID</code> must return the same ID it returned before.</li>
+<li><code>Register</code> is called again on the new connection, and must stream the same route keys, in the same order, as the first time. The host uses the stream to let you rebuild your own route table; it does not re-mount anything from it.</li>
+</ul>
+<p>Generate route keys from something stable — the route itself, or a fixed registration order — not from a clock, a random source, or anything that varies with external state. A process that comes back with different keys is refused and the failure logged as a restart rejection, because the alternative is dispatching requests to whichever handler now happens to hold the old key.</p>
+<p><strong>It does not detect a wedged plugin.</strong> Only exits are noticed. A process that stays up and stops answering keeps its routes.</p>
+<h3 id="what-your-process-must-do">What your process must do</h3>
+<p><strong>Do not let one request end the process.</strong> A fault in a handler should be caught and returned as a gRPC error — <code>INTERNAL</code> is what the host renders as a 500 — rather than propagating out and terminating the server. This matters more here than in an ordinary service: the host holds the path of the socket you were listening on, so a process that dies mid-request takes every one of its routes down until the supervisor gets it back.</p>
+<p>In Go, <code>plugcmd.Run</code> does this for you with recovery interceptors on both the unary and streaming methods. That covers panics raised while serving a request. It cannot cover a panic in a goroutine you started yourself — nothing outside that goroutine can recover it — so recover in your own goroutines. An implementation in another language needs the equivalent guard at its own service boundary.</p>
+<p><strong>Expect to be killed, and to be orphaned.</strong> The host kills the process when it shuts down cleanly. If the host itself is killed, nothing does: the plugin is left running with a socket directory under <code>/tmp</code> that no one will connect to again. Hold no state that a sudden exit would corrupt, and treat a fresh start as the normal case rather than the exceptional one.</p>
+
+</main>
+</body>
+</html>

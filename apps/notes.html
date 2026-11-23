@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notes — Cog Documentation</title>
+<style>
+:root {
+  --sidebar-w: 260px;
+  --fg: #1a1a2e;
+  --bg: #fff;
+  --sidebar-bg: #f5f6f8;
+  --sidebar-border: #e0e0e0;
+  --link: #2563eb;
+  --link-hover: #1d4ed8;
+  --active-bg: #e0e7ff;
+  --active-fg: #1e40af;
+  --code-bg: #f4f4f5;
+  --pre-bg: #272822;
+  --pre-fg: #f8f8f2;
+  --table-border: #d1d5db;
+  --table-stripe: #f9fafb;
+  --heading: #111827;
+  --muted: #6b7280;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: #e5e7eb;
+    --bg: #111827;
+    --sidebar-bg: #1f2937;
+    --sidebar-border: #374151;
+    --link: #60a5fa;
+    --link-hover: #93bbfd;
+    --active-bg: #1e3a5f;
+    --active-fg: #93bbfd;
+    --code-bg: #1f2937;
+    --pre-bg: #0d1117;
+    --pre-fg: #e6edf3;
+    --table-border: #374151;
+    --table-stripe: #1f2937;
+    --heading: #f9fafb;
+    --muted: #9ca3af;
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+  line-height: 1.6;
+}
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+ 
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  overflow-y: auto;
+  padding: 1.5rem 0;
+  z-index: 10;
+}
+.content {
+  margin-left: var(--sidebar-w);
+  max-width: 52rem;
+  padding: 2rem 2.5rem;
+}
+
+ 
+.sidebar .logo {
+  padding: 0 1.25rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+.sidebar .logo a { color: inherit; }
+.sidebar .section-label {
+  padding: 0.75rem 1.25rem 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.sidebar ul { list-style: none; }
+.sidebar li a {
+  display: block;
+  padding: 0.25rem 1.25rem 0.25rem 1.75rem;
+  font-size: 0.875rem;
+  color: var(--fg);
+  border-left: 3px solid transparent;
+}
+.sidebar li a:hover {
+  background: var(--active-bg);
+  text-decoration: none;
+}
+.sidebar li a.active {
+  background: var(--active-bg);
+  color: var(--active-fg);
+  border-left-color: var(--active-fg);
+  font-weight: 600;
+}
+
+ 
+.menu-toggle { display: none; }
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); transition: transform 0.2s; }
+  .sidebar.open { transform: translateX(0); }
+  .content { margin-left: 0; padding: 1rem; }
+  .menu-toggle {
+    display: block; position: fixed; top: 0.75rem; left: 0.75rem;
+    z-index: 20; background: var(--sidebar-bg); border: 1px solid var(--sidebar-border);
+    border-radius: 4px; padding: 0.4rem 0.6rem; cursor: pointer;
+    font-size: 1.25rem; color: var(--fg); line-height: 1;
+  }
+}
+
+ 
+.content h1 { font-size: 2rem; margin: 0 0 1rem; color: var(--heading); }
+.content h2 { font-size: 1.4rem; margin: 2rem 0 0.75rem; color: var(--heading); border-bottom: 1px solid var(--sidebar-border); padding-bottom: 0.3rem; }
+.content h3 { font-size: 1.15rem; margin: 1.5rem 0 0.5rem; color: var(--heading); }
+.content h4 { font-size: 1rem; margin: 1.25rem 0 0.5rem; color: var(--heading); }
+.content p { margin: 0.75rem 0; }
+.content ul, .content ol { margin: 0.75rem 0; padding-left: 1.5rem; }
+.content li { margin: 0.25rem 0; }
+.content blockquote {
+  border-left: 3px solid var(--link);
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+  color: var(--muted);
+  background: var(--code-bg);
+}
+.content code {
+  background: var(--code-bg);
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+.content pre {
+  background: var(--pre-bg);
+  color: var(--pre-fg);
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 1rem 0;
+  line-height: 1.5;
+}
+.content pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.85rem;
+}
+.content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+.content th, .content td {
+  border: 1px solid var(--table-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.content th { background: var(--sidebar-bg); font-weight: 600; }
+.content tr:nth-child(even) { background: var(--table-stripe); }
+.content hr { border: none; border-top: 1px solid var(--sidebar-border); margin: 2rem 0; }
+.content img { max-width: 100%; }
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+<nav class="sidebar">
+  <div class="logo"><a href="../index.html">Cog</a></div>
+  
+  <div class="section-label">Getting Started</div>
+  <ul>
+    
+    <li><a href="../getting-started/configuration.html">Configuration</a></li>
+    
+    <li><a href="../getting-started/first-run.html">First Run</a></li>
+    
+    <li><a href="../getting-started/installation.html">Installation</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Administration</div>
+  <ul>
+    
+    <li><a href="../admin/backup.html">Backup and Restore</a></li>
+    
+    <li><a href="../admin/cli.html">CLI Reference</a></li>
+    
+    <li><a href="../admin/email.html">Email Configuration</a></li>
+    
+    <li><a href="../admin/https.html">Reaching Cog from Anywhere</a></li>
+    
+    <li><a href="../admin/reverse-proxy.html">Reverse Proxy</a></li>
+    
+    <li><a href="../admin/updates.html">Updates</a></li>
+    
+    <li><a href="../admin/users-and-groups.html">Users and Groups</a></li>
+    
+    <li><a href="../admin/volumes.html">Volumes</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Using Cog</div>
+  <ul>
+    
+    <li><a href="../using-cog/app-passwords.html">App Passwords</a></li>
+    
+    <li><a href="../using-cog/files.html">Files</a></li>
+    
+    <li><a href="../using-cog/mfa.html">Multi-Factor Authentication</a></li>
+    
+    <li><a href="../using-cog/sftp.html">SFTP</a></li>
+    
+    <li><a href="../using-cog/search.html">Search</a></li>
+    
+    <li><a href="../using-cog/sharing.html">Sharing</a></li>
+    
+    <li><a href="../using-cog/webdav.html">WebDAV</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Apps</div>
+  <ul>
+    
+    <li><a href="../apps/bookmarks.html">Bookmarks</a></li>
+    
+    <li><a href="../apps/calendar.html">Calendar</a></li>
+    
+    <li><a href="../apps/contacts.html">Contacts</a></li>
+    
+    <li><a href="../apps/dashboard.html">Dashboard</a></li>
+    
+    <li><a href="../apps/gallery.html">Gallery</a></li>
+    
+    <li><a href="../apps/notes.html" class="active">Notes</a></li>
+    
+    <li><a href="../apps/rss.html">RSS / News</a></li>
+    
+    <li><a href="../apps/tasks.html">Tasks</a></li>
+    
+  </ul>
+  
+  <div class="section-label">NextCloud</div>
+  <ul>
+    
+    <li><a href="../nextcloud/clients.html">Compatible Clients</a></li>
+    
+    <li><a href="../nextcloud/login-flow.html">Login Flow v2</a></li>
+    
+    <li><a href="../nextcloud/overview.html">NextCloud Compatibility</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Plugin Development</div>
+  <ul>
+    
+    <li><a href="../plugins/cli-commands.html">CLI Commands</a></li>
+    
+    <li><a href="../plugins/custom-builds.html">Custom Builds</a></li>
+    
+    <li><a href="../plugins/getting-started.html">Getting Started with Plugin Development</a></li>
+    
+    <li><a href="../plugins/databases.html">Plugin Databases</a></li>
+    
+    <li><a href="../plugins/plugin-interface.html">Plugin Interface Reference</a></li>
+    
+    <li><a href="../plugins/overview.html">Plugin System Overview</a></li>
+    
+    <li><a href="../plugins/registration.html">Registration</a></li>
+    
+    <li><a href="../plugins/search.html">Search Indexing</a></li>
+    
+    <li><a href="../plugins/settings.html">Settings Pages</a></li>
+    
+    <li><a href="../plugins/sharing.html">Sharing Resources</a></li>
+    
+    <li><a href="../plugins/grpc-plugins.html">gRPC Plugins</a></li>
+    
+  </ul>
+  
+</nav>
+<main class="content">
+<h1 id="notes">Notes</h1>
+<p>The Notes app provides markdown note-taking with notebooks and tags.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>Markdown editing</strong> -- write notes in GitHub-Flavored Markdown</li>
+<li><strong>Notebooks</strong> -- organize notes into logical groups</li>
+<li><strong>Tags</strong> -- label notes for filtering and discovery</li>
+<li><strong>Archive</strong> -- archive notes you want to keep but hide from the main view</li>
+<li><strong>Autosave</strong> -- notes save automatically as you type</li>
+</ul>
+<h2 id="editing">Editing</h2>
+<p>The editor supports standard Markdown with:</p>
+<ul>
+<li>Headings, bold, italic, links, images</li>
+<li>Code blocks with syntax highlighting</li>
+<li>Lists (ordered and unordered)</li>
+<li>Tables</li>
+<li>Blockquotes</li>
+</ul>
+<h2 id="sharing">Sharing</h2>
+<p>Notes and notebooks can be shared with users or groups:</p>
+<ul>
+<li><strong>Read</strong> -- view the note</li>
+<li><strong>Write</strong> -- edit the note</li>
+<li><strong>Reshare</strong> -- manage sharing</li>
+</ul>
+<h2 id="search">Search</h2>
+<p>Notes are indexed for full-text search. Search matches against note titles, body text, and tags.</p>
+
+</main>
+</body>
+</html>

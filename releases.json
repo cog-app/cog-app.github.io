@@ -1,0 +1,37 @@
+{
+  "releases": [
+    {
+      "version": "v0.1.0-rc.1",
+      "date": "2026-11-23T06:19:45Z",
+      "notes_url": "https://github.com/cog-app/cog/releases/tag/v0.1.0-rc.1",
+      "prerelease": true,
+      "assets": {
+        "darwin-amd64": {
+          "url": "https://github.com/cog-app/cog/releases/download/v0.1.0-rc.1/cog-darwin-amd64",
+          "sha256": "3ab6505e25a0ef22ce366ecadccfd68833e7b037e509f76af42fce739f8ee224",
+          "size": 53768656
+        },
+        "darwin-arm64": {
+          "url": "https://github.com/cog-app/cog/releases/download/v0.1.0-rc.1/cog-darwin-arm64",
+          "sha256": "f9133db1dcb71c3b678da5f1a4a3b057c59bdfa2405c1b46bcd05d9a858e546a",
+          "size": 49495266
+        },
+        "linux-amd64": {
+          "url": "https://github.com/cog-app/cog/releases/download/v0.1.0-rc.1/cog-linux-amd64",
+          "sha256": "421ac669c7fc0094f497db738615e2a0e4ef1eaf3f7c076880a33d8ff3d2a4bf",
+          "size": 53898104
+        },
+        "linux-arm64": {
+          "url": "https://github.com/cog-app/cog/releases/download/v0.1.0-rc.1/cog-linux-arm64",
+          "sha256": "b65f9e0859250af882d50672395dc925b088246e31a2db2bc5d21973f85e07e1",
+          "size": 49290944
+        },
+        "windows-amd64": {
+          "url": "https://github.com/cog-app/cog/releases/download/v0.1.0-rc.1/cog-windows-amd64.exe",
+          "sha256": "fd0074ab855311712452aa01a2e6c1baa656d8a45689ed7ba9989227175c276f",
+          "size": 54020608
+        }
+      }
+    }
+  ]
+}

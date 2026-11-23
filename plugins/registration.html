@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registration — Cog Documentation</title>
+<style>
+:root {
+  --sidebar-w: 260px;
+  --fg: #1a1a2e;
+  --bg: #fff;
+  --sidebar-bg: #f5f6f8;
+  --sidebar-border: #e0e0e0;
+  --link: #2563eb;
+  --link-hover: #1d4ed8;
+  --active-bg: #e0e7ff;
+  --active-fg: #1e40af;
+  --code-bg: #f4f4f5;
+  --pre-bg: #272822;
+  --pre-fg: #f8f8f2;
+  --table-border: #d1d5db;
+  --table-stripe: #f9fafb;
+  --heading: #111827;
+  --muted: #6b7280;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: #e5e7eb;
+    --bg: #111827;
+    --sidebar-bg: #1f2937;
+    --sidebar-border: #374151;
+    --link: #60a5fa;
+    --link-hover: #93bbfd;
+    --active-bg: #1e3a5f;
+    --active-fg: #93bbfd;
+    --code-bg: #1f2937;
+    --pre-bg: #0d1117;
+    --pre-fg: #e6edf3;
+    --table-border: #374151;
+    --table-stripe: #1f2937;
+    --heading: #f9fafb;
+    --muted: #9ca3af;
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+  line-height: 1.6;
+}
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+ 
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  overflow-y: auto;
+  padding: 1.5rem 0;
+  z-index: 10;
+}
+.content {
+  margin-left: var(--sidebar-w);
+  max-width: 52rem;
+  padding: 2rem 2.5rem;
+}
+
+ 
+.sidebar .logo {
+  padding: 0 1.25rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+.sidebar .logo a { color: inherit; }
+.sidebar .section-label {
+  padding: 0.75rem 1.25rem 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.sidebar ul { list-style: none; }
+.sidebar li a {
+  display: block;
+  padding: 0.25rem 1.25rem 0.25rem 1.75rem;
+  font-size: 0.875rem;
+  color: var(--fg);
+  border-left: 3px solid transparent;
+}
+.sidebar li a:hover {
+  background: var(--active-bg);
+  text-decoration: none;
+}
+.sidebar li a.active {
+  background: var(--active-bg);
+  color: var(--active-fg);
+  border-left-color: var(--active-fg);
+  font-weight: 600;
+}
+
+ 
+.menu-toggle { display: none; }
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); transition: transform 0.2s; }
+  .sidebar.open { transform: translateX(0); }
+  .content { margin-left: 0; padding: 1rem; }
+  .menu-toggle {
+    display: block; position: fixed; top: 0.75rem; left: 0.75rem;
+    z-index: 20; background: var(--sidebar-bg); border: 1px solid var(--sidebar-border);
+    border-radius: 4px; padding: 0.4rem 0.6rem; cursor: pointer;
+    font-size: 1.25rem; color: var(--fg); line-height: 1;
+  }
+}
+
+ 
+.content h1 { font-size: 2rem; margin: 0 0 1rem; color: var(--heading); }
+.content h2 { font-size: 1.4rem; margin: 2rem 0 0.75rem; color: var(--heading); border-bottom: 1px solid var(--sidebar-border); padding-bottom: 0.3rem; }
+.content h3 { font-size: 1.15rem; margin: 1.5rem 0 0.5rem; color: var(--heading); }
+.content h4 { font-size: 1rem; margin: 1.25rem 0 0.5rem; color: var(--heading); }
+.content p { margin: 0.75rem 0; }
+.content ul, .content ol { margin: 0.75rem 0; padding-left: 1.5rem; }
+.content li { margin: 0.25rem 0; }
+.content blockquote {
+  border-left: 3px solid var(--link);
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+  color: var(--muted);
+  background: var(--code-bg);
+}
+.content code {
+  background: var(--code-bg);
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+.content pre {
+  background: var(--pre-bg);
+  color: var(--pre-fg);
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 1rem 0;
+  line-height: 1.5;
+}
+.content pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.85rem;
+}
+.content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+.content th, .content td {
+  border: 1px solid var(--table-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.content th { background: var(--sidebar-bg); font-weight: 600; }
+.content tr:nth-child(even) { background: var(--table-stripe); }
+.content hr { border: none; border-top: 1px solid var(--sidebar-border); margin: 2rem 0; }
+.content img { max-width: 100%; }
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+<nav class="sidebar">
+  <div class="logo"><a href="../index.html">Cog</a></div>
+  
+  <div class="section-label">Getting Started</div>
+  <ul>
+    
+    <li><a href="../getting-started/configuration.html">Configuration</a></li>
+    
+    <li><a href="../getting-started/first-run.html">First Run</a></li>
+    
+    <li><a href="../getting-started/installation.html">Installation</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Administration</div>
+  <ul>
+    
+    <li><a href="../admin/backup.html">Backup and Restore</a></li>
+    
+    <li><a href="../admin/cli.html">CLI Reference</a></li>
+    
+    <li><a href="../admin/email.html">Email Configuration</a></li>
+    
+    <li><a href="../admin/https.html">Reaching Cog from Anywhere</a></li>
+    
+    <li><a href="../admin/reverse-proxy.html">Reverse Proxy</a></li>
+    
+    <li><a href="../admin/updates.html">Updates</a></li>
+    
+    <li><a href="../admin/users-and-groups.html">Users and Groups</a></li>
+    
+    <li><a href="../admin/volumes.html">Volumes</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Using Cog</div>
+  <ul>
+    
+    <li><a href="../using-cog/app-passwords.html">App Passwords</a></li>
+    
+    <li><a href="../using-cog/files.html">Files</a></li>
+    
+    <li><a href="../using-cog/mfa.html">Multi-Factor Authentication</a></li>
+    
+    <li><a href="../using-cog/sftp.html">SFTP</a></li>
+    
+    <li><a href="../using-cog/search.html">Search</a></li>
+    
+    <li><a href="../using-cog/sharing.html">Sharing</a></li>
+    
+    <li><a href="../using-cog/webdav.html">WebDAV</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Apps</div>
+  <ul>
+    
+    <li><a href="../apps/bookmarks.html">Bookmarks</a></li>
+    
+    <li><a href="../apps/calendar.html">Calendar</a></li>
+    
+    <li><a href="../apps/contacts.html">Contacts</a></li>
+    
+    <li><a href="../apps/dashboard.html">Dashboard</a></li>
+    
+    <li><a href="../apps/gallery.html">Gallery</a></li>
+    
+    <li><a href="../apps/notes.html">Notes</a></li>
+    
+    <li><a href="../apps/rss.html">RSS / News</a></li>
+    
+    <li><a href="../apps/tasks.html">Tasks</a></li>
+    
+  </ul>
+  
+  <div class="section-label">NextCloud</div>
+  <ul>
+    
+    <li><a href="../nextcloud/clients.html">Compatible Clients</a></li>
+    
+    <li><a href="../nextcloud/login-flow.html">Login Flow v2</a></li>
+    
+    <li><a href="../nextcloud/overview.html">NextCloud Compatibility</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Plugin Development</div>
+  <ul>
+    
+    <li><a href="../plugins/cli-commands.html">CLI Commands</a></li>
+    
+    <li><a href="../plugins/custom-builds.html">Custom Builds</a></li>
+    
+    <li><a href="../plugins/getting-started.html">Getting Started with Plugin Development</a></li>
+    
+    <li><a href="../plugins/databases.html">Plugin Databases</a></li>
+    
+    <li><a href="../plugins/plugin-interface.html">Plugin Interface Reference</a></li>
+    
+    <li><a href="../plugins/overview.html">Plugin System Overview</a></li>
+    
+    <li><a href="../plugins/registration.html" class="active">Registration</a></li>
+    
+    <li><a href="../plugins/search.html">Search Indexing</a></li>
+    
+    <li><a href="../plugins/settings.html">Settings Pages</a></li>
+    
+    <li><a href="../plugins/sharing.html">Sharing Resources</a></li>
+    
+    <li><a href="../plugins/grpc-plugins.html">gRPC Plugins</a></li>
+    
+  </ul>
+  
+</nav>
+<main class="content">
+<h1 id="registration">Registration</h1>
+<p>During <code>Register()</code>, plugins use the <code>Registrar</code> interface to declare their capabilities.</p>
+<h2 id="pages">Pages</h2>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">RegisterPage</span>(<span style="color:#a6e22e">path</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">handler</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span>)
+</span></span></code></pre><p>Mounts a GET handler at <code>/apps/{plugin_id}/{path}</code>. The handler renders an HTML content fragment -- the navigation bar, head, and scripts are wrapped automatically by middleware.</p>
+<p>Use <code>{$}</code> as the path for the plugin's root page.</p>
+<p>The request context contains the authenticated user and CSRF token:</p>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">RegisterPage</span>(<span style="color:#e6db74">&#34;{$}&#34;</span>, <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">user</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">plugin</span>.<span style="color:#a6e22e">UserFromContext</span>(<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Context</span>())
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">csrf</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">plugin</span>.<span style="color:#a6e22e">CSRFToken</span>(<span style="color:#a6e22e">r</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Render page content...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}))
+</span></span></code></pre><h2 id="api-endpoints">API endpoints</h2>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">RegisterAPI</span>(<span style="color:#a6e22e">path</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">handler</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span>)
+</span></span></code></pre><p>Mounts a GET handler at <code>/apps/{plugin_id}/{path}</code> for JSON or HTMX partial responses. Auth-wrapped (returns 401 on failure, not a redirect).</p>
+<h2 id="actions">Actions</h2>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">RegisterAction</span>(<span style="color:#a6e22e">method</span>, <span style="color:#a6e22e">path</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">handler</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span>)
+</span></span></code></pre><p>Mounts a state-changing handler (POST, PUT, or DELETE) at <code>/apps/{plugin_id}/{path}</code>. Automatically wrapped with auth and CSRF protection.</p>
+<p>For form submissions, use the <a href="../admin/cli.html">Post-Redirect-Get pattern</a>: process the form, set a flash message, and redirect with 303.</p>
+<h2 id="navigation-items">Navigation items</h2>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">RegisterNavItem</span>(<span style="color:#a6e22e">item</span> <span style="color:#a6e22e">NavItem</span>)
+</span></span></code></pre><p>Adds an entry to the top navigation bar.</p>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">NavItem</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Label</span> <span style="color:#66d9ef">string</span>  <span style="color:#75715e">// Display text, e.g. &#34;Files&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">URL</span>   <span style="color:#66d9ef">string</span>  <span style="color:#75715e">// Link target, e.g. &#34;/apps/files&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">Icon</span>  <span style="color:#66d9ef">string</span>  <span style="color:#75715e">// Optional inline SVG markup
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre><p>Nav items from disabled plugins are automatically excluded.</p>
+<h2 id="dashboard-widgets">Dashboard widgets</h2>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">RegisterWidget</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">Widget</span>)
+</span></span></code></pre><p>Adds a widget to the dashboard.</p>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Widget</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Title</span>    <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Priority</span> <span style="color:#66d9ef">int</span>  <span style="color:#75715e">// Lower = rendered first
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">Render</span>   <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Writer</span>, <span style="color:#a6e22e">userID</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre><p>The <code>Render</code> function writes HTML directly to the writer. Keep widget rendering fast -- there is no timeout enforcement.</p>
+<h2 id="hooks">Hooks</h2>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">RegisterHook</span>(<span style="color:#a6e22e">hookName</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">callback</span> <span style="color:#a6e22e">HookCallback</span>)
+</span></span></code></pre><p>Subscribe to named events. Hook callbacks receive a context and event data:</p>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">HookCallback</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">data</span> <span style="color:#a6e22e">any</span>)
+</span></span></code></pre><h2 id="webdav-handlers">WebDAV handlers</h2>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">RegisterDAVHandler</span>(<span style="color:#a6e22e">prefix</span> <span style="color:#66d9ef">string</span>, <span style="color:#a6e22e">handler</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span>)
+</span></span></code></pre><p>Mounts a handler under <code>/remote.php/dav/{prefix}/</code>. The handler receives authenticated requests with the full path. Used for CalDAV, CardDAV, and custom DAV endpoints.</p>
+<h2 id="settings-pages">Settings pages</h2>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">RegisterSettingsPage</span>(<span style="color:#a6e22e">page</span> <span style="color:#a6e22e">SettingsPage</span>)
+</span></span></code></pre><p>Adds an admin settings page for the plugin.</p>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">SettingsPage</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Slug</span>    <span style="color:#66d9ef">string</span>        <span style="color:#75715e">// URL segment (empty for default page)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">Name</span>    <span style="color:#66d9ef">string</span>        <span style="color:#75715e">// Sidebar display name (empty uses plugin name)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">Handler</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span>  <span style="color:#75715e">// GET -- renders content fragment
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">Action</span>  <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Handler</span>  <span style="color:#75715e">// POST -- handles form submission (optional)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre><p>See <a href="settings.html">Settings Pages</a> for details.</p>
+<h2 id="cli-commands">CLI commands</h2>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">RegisterCommand</span>(<span style="color:#a6e22e">def</span> <span style="color:#a6e22e">CommandDef</span>)
+</span></span></code></pre><p>Registers a CLI command available as <code>cog &lt;plugin-id&gt; &lt;command&gt;</code>.</p>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">CommandDef</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Name</span>  <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Short</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Args</span>  []<span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Run</span>   <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">args</span> []<span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Sub</span>   []<span style="color:#a6e22e">CommandDef</span>  <span style="color:#75715e">// Subcommands (mutually exclusive with Run)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre><p>See <a href="cli-commands.html">CLI Commands</a> for details.</p>
+<h2 id="search-sources">Search sources</h2>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">RegisterSearchSource</span>(<span style="color:#a6e22e">def</span> <span style="color:#a6e22e">SearchSourceDef</span>)
+</span></span></code></pre><p>Registers a database table for full-text indexing. See <a href="search.html">Search Indexing</a> for details.</p>
+<h2 id="shareable-resources">Shareable resources</h2>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">RegisterResource</span>(<span style="color:#a6e22e">def</span> <span style="color:#a6e22e">ResourceDef</span>)
+</span></span></code></pre><p>Declares a resource type that users can share. See <a href="sharing.html">Sharing Resources</a> for details.</p>
+
+</main>
+</body>
+</html>

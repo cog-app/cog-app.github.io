@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reaching Cog from Anywhere — Cog Documentation</title>
+<style>
+:root {
+  --sidebar-w: 260px;
+  --fg: #1a1a2e;
+  --bg: #fff;
+  --sidebar-bg: #f5f6f8;
+  --sidebar-border: #e0e0e0;
+  --link: #2563eb;
+  --link-hover: #1d4ed8;
+  --active-bg: #e0e7ff;
+  --active-fg: #1e40af;
+  --code-bg: #f4f4f5;
+  --pre-bg: #272822;
+  --pre-fg: #f8f8f2;
+  --table-border: #d1d5db;
+  --table-stripe: #f9fafb;
+  --heading: #111827;
+  --muted: #6b7280;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg: #e5e7eb;
+    --bg: #111827;
+    --sidebar-bg: #1f2937;
+    --sidebar-border: #374151;
+    --link: #60a5fa;
+    --link-hover: #93bbfd;
+    --active-bg: #1e3a5f;
+    --active-fg: #93bbfd;
+    --code-bg: #1f2937;
+    --pre-bg: #0d1117;
+    --pre-fg: #e6edf3;
+    --table-border: #374151;
+    --table-stripe: #1f2937;
+    --heading: #f9fafb;
+    --muted: #9ca3af;
+  }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: var(--fg);
+  background: var(--bg);
+  line-height: 1.6;
+}
+a { color: var(--link); text-decoration: none; }
+a:hover { color: var(--link-hover); text-decoration: underline; }
+
+ 
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  overflow-y: auto;
+  padding: 1.5rem 0;
+  z-index: 10;
+}
+.content {
+  margin-left: var(--sidebar-w);
+  max-width: 52rem;
+  padding: 2rem 2.5rem;
+}
+
+ 
+.sidebar .logo {
+  padding: 0 1.25rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+.sidebar .logo a { color: inherit; }
+.sidebar .section-label {
+  padding: 0.75rem 1.25rem 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.sidebar ul { list-style: none; }
+.sidebar li a {
+  display: block;
+  padding: 0.25rem 1.25rem 0.25rem 1.75rem;
+  font-size: 0.875rem;
+  color: var(--fg);
+  border-left: 3px solid transparent;
+}
+.sidebar li a:hover {
+  background: var(--active-bg);
+  text-decoration: none;
+}
+.sidebar li a.active {
+  background: var(--active-bg);
+  color: var(--active-fg);
+  border-left-color: var(--active-fg);
+  font-weight: 600;
+}
+
+ 
+.menu-toggle { display: none; }
+@media (max-width: 768px) {
+  .sidebar { transform: translateX(-100%); transition: transform 0.2s; }
+  .sidebar.open { transform: translateX(0); }
+  .content { margin-left: 0; padding: 1rem; }
+  .menu-toggle {
+    display: block; position: fixed; top: 0.75rem; left: 0.75rem;
+    z-index: 20; background: var(--sidebar-bg); border: 1px solid var(--sidebar-border);
+    border-radius: 4px; padding: 0.4rem 0.6rem; cursor: pointer;
+    font-size: 1.25rem; color: var(--fg); line-height: 1;
+  }
+}
+
+ 
+.content h1 { font-size: 2rem; margin: 0 0 1rem; color: var(--heading); }
+.content h2 { font-size: 1.4rem; margin: 2rem 0 0.75rem; color: var(--heading); border-bottom: 1px solid var(--sidebar-border); padding-bottom: 0.3rem; }
+.content h3 { font-size: 1.15rem; margin: 1.5rem 0 0.5rem; color: var(--heading); }
+.content h4 { font-size: 1rem; margin: 1.25rem 0 0.5rem; color: var(--heading); }
+.content p { margin: 0.75rem 0; }
+.content ul, .content ol { margin: 0.75rem 0; padding-left: 1.5rem; }
+.content li { margin: 0.25rem 0; }
+.content blockquote {
+  border-left: 3px solid var(--link);
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+  color: var(--muted);
+  background: var(--code-bg);
+}
+.content code {
+  background: var(--code-bg);
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+.content pre {
+  background: var(--pre-bg);
+  color: var(--pre-fg);
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 1rem 0;
+  line-height: 1.5;
+}
+.content pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.85rem;
+}
+.content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+.content th, .content td {
+  border: 1px solid var(--table-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.content th { background: var(--sidebar-bg); font-weight: 600; }
+.content tr:nth-child(even) { background: var(--table-stripe); }
+.content hr { border: none; border-top: 1px solid var(--sidebar-border); margin: 2rem 0; }
+.content img { max-width: 100%; }
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+<nav class="sidebar">
+  <div class="logo"><a href="../index.html">Cog</a></div>
+  
+  <div class="section-label">Getting Started</div>
+  <ul>
+    
+    <li><a href="../getting-started/configuration.html">Configuration</a></li>
+    
+    <li><a href="../getting-started/first-run.html">First Run</a></li>
+    
+    <li><a href="../getting-started/installation.html">Installation</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Administration</div>
+  <ul>
+    
+    <li><a href="../admin/backup.html">Backup and Restore</a></li>
+    
+    <li><a href="../admin/cli.html">CLI Reference</a></li>
+    
+    <li><a href="../admin/email.html">Email Configuration</a></li>
+    
+    <li><a href="../admin/https.html" class="active">Reaching Cog from Anywhere</a></li>
+    
+    <li><a href="../admin/reverse-proxy.html">Reverse Proxy</a></li>
+    
+    <li><a href="../admin/updates.html">Updates</a></li>
+    
+    <li><a href="../admin/users-and-groups.html">Users and Groups</a></li>
+    
+    <li><a href="../admin/volumes.html">Volumes</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Using Cog</div>
+  <ul>
+    
+    <li><a href="../using-cog/app-passwords.html">App Passwords</a></li>
+    
+    <li><a href="../using-cog/files.html">Files</a></li>
+    
+    <li><a href="../using-cog/mfa.html">Multi-Factor Authentication</a></li>
+    
+    <li><a href="../using-cog/sftp.html">SFTP</a></li>
+    
+    <li><a href="../using-cog/search.html">Search</a></li>
+    
+    <li><a href="../using-cog/sharing.html">Sharing</a></li>
+    
+    <li><a href="../using-cog/webdav.html">WebDAV</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Apps</div>
+  <ul>
+    
+    <li><a href="../apps/bookmarks.html">Bookmarks</a></li>
+    
+    <li><a href="../apps/calendar.html">Calendar</a></li>
+    
+    <li><a href="../apps/contacts.html">Contacts</a></li>
+    
+    <li><a href="../apps/dashboard.html">Dashboard</a></li>
+    
+    <li><a href="../apps/gallery.html">Gallery</a></li>
+    
+    <li><a href="../apps/notes.html">Notes</a></li>
+    
+    <li><a href="../apps/rss.html">RSS / News</a></li>
+    
+    <li><a href="../apps/tasks.html">Tasks</a></li>
+    
+  </ul>
+  
+  <div class="section-label">NextCloud</div>
+  <ul>
+    
+    <li><a href="../nextcloud/clients.html">Compatible Clients</a></li>
+    
+    <li><a href="../nextcloud/login-flow.html">Login Flow v2</a></li>
+    
+    <li><a href="../nextcloud/overview.html">NextCloud Compatibility</a></li>
+    
+  </ul>
+  
+  <div class="section-label">Plugin Development</div>
+  <ul>
+    
+    <li><a href="../plugins/cli-commands.html">CLI Commands</a></li>
+    
+    <li><a href="../plugins/custom-builds.html">Custom Builds</a></li>
+    
+    <li><a href="../plugins/getting-started.html">Getting Started with Plugin Development</a></li>
+    
+    <li><a href="../plugins/databases.html">Plugin Databases</a></li>
+    
+    <li><a href="../plugins/plugin-interface.html">Plugin Interface Reference</a></li>
+    
+    <li><a href="../plugins/overview.html">Plugin System Overview</a></li>
+    
+    <li><a href="../plugins/registration.html">Registration</a></li>
+    
+    <li><a href="../plugins/search.html">Search Indexing</a></li>
+    
+    <li><a href="../plugins/settings.html">Settings Pages</a></li>
+    
+    <li><a href="../plugins/sharing.html">Sharing Resources</a></li>
+    
+    <li><a href="../plugins/grpc-plugins.html">gRPC Plugins</a></li>
+    
+  </ul>
+  
+</nav>
+<main class="content">
+<h1 id="reaching-cog-from-anywhere">Reaching Cog from Anywhere</h1>
+<p>Cog can serve HTTPS itself, with a free certificate from Let's Encrypt that
+it renews on its own. This page is about the usual home setup: Cog on a
+computer in your house, and your router passing connections from the
+internet to it. Choose <strong>Anywhere, over HTTPS</strong> in setup and it does
+everything here except the router.</p>
+<p>If you already run Caddy, nginx or Traefik, choose <strong>through a reverse
+proxy I already run</strong> instead and see <a href="reverse-proxy.html">Reverse Proxy</a>.
+If you use Tailscale, see <a href="#with-tailscale">With Tailscale</a>: it needs no
+domain and no router.</p>
+<h2 id="what-you-need">What you need</h2>
+<ol>
+<li>
+<p><strong>A domain name that points at your home.</strong> Your home's public address
+is your router's internet (WAN) address. Most home addresses change now
+and then, so use a dynamic DNS service that follows it:
+<a href="https://www.duckdns.org">Duck DNS</a> and <a href="https://desec.io">deSEC</a> are
+free, and many routers can update them by themselves. If you own a
+domain, your DNS host may offer the same, or Cog's DNS check (below)
+works with it directly.</p>
+</li>
+<li>
+<p><strong>Port forwarding on your router.</strong> Setup's review page lists the rules
+with this computer's address filled in. For the default settings:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Protocol</th>
+<th>Public port</th>
+<th>To this computer, port</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cog HTTPS</td>
+<td>TCP</td>
+<td>443</td>
+<td>8443</td>
+</tr>
+<tr>
+<td>Cog SSH (optional)</td>
+<td>TCP</td>
+<td>8522</td>
+<td>8522</td>
+</tr>
+</tbody>
+</table>
+<p>Cog listens on 8443 rather than 443 so that it needs no administrator
+rights; the router translates. Look for &quot;Port forwarding&quot;, &quot;Virtual
+servers&quot; or &quot;NAT&quot; in the router's settings.</p>
+</li>
+<li>
+<p><strong>A fixed address for this computer on your network.</strong> Routers hand out
+addresses that can change; make a &quot;DHCP reservation&quot; for this computer
+so the rules keep pointing at it.</p>
+</li>
+</ol>
+<p>Some internet providers (often mobile and satellite ones, and some fibre)
+put many customers behind one address (&quot;carrier-grade NAT&quot;), and nothing
+from outside reaches you. If your router's WAN address starts with <code>100.64</code>
+to <code>100.127</code>, or does not match what <a href="https://ifconfig.me">https://ifconfig.me</a> shows, ask your
+provider for a public address, or use the reverse proxy route with a
+tunnel such as Cloudflare Tunnel or Tailscale Funnel.</p>
+<h2 id="how-lets-encrypt-checks-the-name-is-yours">How Let's Encrypt checks the name is yours</h2>
+<p>Setup offers three ways, which differ in what must be reachable:</p>
+<ul>
+<li><strong>Through the HTTPS port</strong> (TLS-ALPN-01, the default). Let's Encrypt
+connects to port 443, which your router sends to Cog. Nothing else to
+forward.</li>
+<li><strong>Through port 80</strong> (HTTP-01). For routers or providers that will not
+pass 443 until a certificate exists. Forward public port 80 to the
+computer's port 8080 too. Port 80 then also sends visitors on to HTTPS.</li>
+<li><strong>Through your DNS host</strong> (DNS-01). Cog adds a record with your DNS
+host's API. No ports need forwarding for the certificate (people still
+need 443 to reach Cog), and it is the only way to get a wildcard
+certificate (<code>*.example.com</code>). Built in: Cloudflare, deSEC, DigitalOcean,
+Duck DNS, Gandi, Hetzner, Namecheap, OVH, Porkbun, RFC 2136 (BIND, Knot,
+PowerDNS), lego's <code>httpreq</code> and <code>exec</code>.</li>
+</ul>
+<p>Setup asks for the certificate before it finishes, so a mistake shows up
+there with what to check. If it fails, Cog still starts and tries again
+every hour; once the problem is fixed it serves HTTPS without being set up
+again. To experiment without running into Let's Encrypt's limits, tick
+<strong>Use Let's Encrypt's test service</strong>, then run setup again without it.</p>
+<h2 id="with-tailscale">With Tailscale</h2>
+<p><a href="https://tailscale.com">Tailscale</a> joins your devices into a private
+network. If it runs on the computer Cog is on, choose <strong>Anywhere, on my
+devices with Tailscale</strong> in setup. Setup runs <code>tailscale serve</code>, so
+<code>https://&lt;computer&gt;.&lt;tailnet&gt;.ts.net</code> reaches Cog from every device signed
+in to your tailnet, with a certificate Tailscale renews. Nothing is
+forwarded on the router and Cog listens on this computer only.</p>
+<ul>
+<li>Turn on <strong>HTTPS Certificates</strong> on the DNS page of Tailscale's admin
+console first; setup says so if it is off.</li>
+<li>On Linux, <code>tailscale serve</code> needs root or Tailscale's operator: for a
+per-user install run <code>sudo tailscale set --operator=$USER</code> once.</li>
+<li><strong>Tailscale Funnel</strong> also lets in people who do not use Tailscale, which
+share links need. It must be allowed for the computer in the tailnet's
+access controls. With it on, the sign-in page is on the internet: the
+advice under <a href="#keeping-it-safe">Keeping it safe</a> applies.</li>
+</ul>
+<p>Choosing something else in setup later turns <code>tailscale serve</code> (or
+Funnel) off again.</p>
+<h2 id="on-your-network-only-over-https">On your network only, over HTTPS</h2>
+<p>Choose <strong>At home, on my network</strong>, then <strong>HTTPS with a certificate Cog
+makes</strong>. Cog signs a certificate for this computer's address and names
+(<code>192.168.1.20</code>, <code>homebox</code>, <code>homebox.local</code>) and renews it itself. No CA
+vouches for it, so each browser warns the first time: setup and Cog's log
+show its SHA-256 fingerprint, which you compare with the one in the
+browser's warning before you accept it.</p>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span>[<span style="color:#a6e22e">tls</span>]
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mode</span> = <span style="color:#e6db74">&#34;self-signed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addr</span> = <span style="color:#e6db74">&#34;:8443&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">domains</span> = [<span style="color:#e6db74">&#34;192.168.1.20&#34;</span>, <span style="color:#e6db74">&#34;homebox&#34;</span>, <span style="color:#e6db74">&#34;homebox.local&#34;</span>, <span style="color:#e6db74">&#34;localhost&#34;</span>]
+</span></span></code></pre><p>The certificate is kept in <code>data/tls</code>; a new name in <code>domains</code> makes a new
+one.</p>
+<h2 id="keeping-it-safe">Keeping it safe</h2>
+<p>Anyone on the internet can reach your sign-in page once the port is open.</p>
+<ul>
+<li><strong>Use a long admin password and turn on two-factor sign-in</strong> (Settings &gt;
+Security). Admins can require it for everyone in Admin &gt; General.</li>
+<li>Cog limits how fast anyone can guess passwords, per address and per
+account, over the web, WebDAV and SSH alike.</li>
+<li><strong>SSH</strong>: setup turns account passwords off for SSH when Cog is reachable
+from the internet, so it takes keys and app passwords only, which cannot
+be guessed. Forwarding the SSH port is optional; leave it closed if you
+only use SFTP at home.</li>
+<li><strong>Keep Cog updated.</strong> Leave the daily check on; Admin &gt; Updates installs
+a release with one click, or setup can install them automatically.</li>
+<li>Plain HTTP stays on, but only for this computer (<code>127.0.0.1:8580</code>), for
+the command line and anything set up to use it before.</li>
+</ul>
+<h2 id="settings">Settings</h2>
+<p>Setup writes these to <code>cog.toml</code>; you can also set them by hand or with
+environment variables (see <a href="../getting-started/configuration.html">Configuration</a>).</p>
+<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">base_url</span> = <span style="color:#e6db74">&#34;https://cloud.example.com&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addr</span> = <span style="color:#e6db74">&#34;127.0.0.1:8580&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>[<span style="color:#a6e22e">tls</span>]
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mode</span> = <span style="color:#e6db74">&#34;acme&#34;</span>                    <span style="color:#75715e"># or &#34;files&#34; (cert_file, key_file), &#34;self-signed&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">addr</span> = <span style="color:#e6db74">&#34;:8443&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">domains</span> = [<span style="color:#e6db74">&#34;cloud.example.com&#34;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">email</span> = <span style="color:#e6db74">&#34;you@example.com&#34;</span>        <span style="color:#75715e"># optional</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">challenge</span> = <span style="color:#e6db74">&#34;tls-alpn-01&#34;</span>        <span style="color:#75715e"># &#34;http-01&#34; (with http_addr), &#34;dns-01&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># http_addr = &#34;:8080&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># dns_provider = &#34;duckdns&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># [tls.dns_env]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># DUCKDNS_TOKEN = &#34;...&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ca = &#34;staging&#34;</span>
+</span></span></code></pre><p>Certificates and the ACME account are kept in <code>data/acme</code>.</p>
+<p>With <code>mode = &quot;files&quot;</code>, Cog serves the certificate in <code>cert_file</code> and
+<code>key_file</code> and reloads them hourly, so a certificate another tool renews is
+picked up without a restart.</p>
+
+</main>
+</body>
+</html>
