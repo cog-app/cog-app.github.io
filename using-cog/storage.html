@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Storage — Cog docs</title>
+<link rel="stylesheet" href="../static/style.css">
+<link rel="icon" href="../static/favicon.svg" type="image/svg+xml">
+<script src="../static/cog.js"></script>
+<script src="../static/docs-search.js" defer></script>
+</head>
+<body class="docs">
+<nav class="navbar" aria-label="Main">
+	<a class="navbar-brand" href="../index.html" aria-label="Cog docs home">
+		<img src="../static/favicon.svg" width="20" height="20" alt="">
+		<span class="brand-text">Cog docs</span>
+	</a>
+	<div class="navbar-spacer"></div>
+	<div class="navbar-search" role="search">
+		<label class="sr-only" for="search-box">Search the docs</label>
+		<input type="search" id="search-box" class="form-control search-input" placeholder="Search the docs (/)…" autocomplete="off" aria-controls="search-results" data-docs-index="../search.json" data-docs-root="../">
+		<div id="search-results" class="search-results" aria-live="polite"></div>
+	</div>
+	<button type="button" class="btn-icon search-toggle" data-search-open aria-label="Search" aria-expanded="false" aria-controls="search-box">
+		<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+	</button>
+	<div class="navbar-end">
+		<a class="btn btn-primary btn-sm" href="https://github.com/cog-app/cog/releases/latest">Download</a>
+	</div>
+</nav>
+<main class="content">
+	<div class="sidebar-layout">
+<nav class="sidebar docs-sidebar" aria-label="Documentation">
+			<a href="../index.html" class="sidebar-item">Overview</a>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">Getting started</summary>
+			<a href="../getting-started/configuration.html" class="sidebar-item">Configuration</a>
+			<a href="../getting-started/first-run.html" class="sidebar-item">First Run</a>
+			<a href="../getting-started/installation.html" class="sidebar-item">Installation</a>
+	</details>
+	<details class="sidebar-section" open>
+		<summary class="sidebar-heading">Using Cog</summary>
+			<a href="../using-cog/app-passwords.html" class="sidebar-item">App Passwords</a>
+			<a href="../using-cog/files.html" class="sidebar-item">Files</a>
+			<a href="../using-cog/groups.html" class="sidebar-item">Groups</a>
+			<a href="../using-cog/mfa.html" class="sidebar-item">Multi-Factor Authentication</a>
+			<a href="../using-cog/sftp.html" class="sidebar-item">SFTP</a>
+			<a href="../using-cog/search.html" class="sidebar-item">Search</a>
+			<a href="../using-cog/sharing.html" class="sidebar-item">Sharing</a>
+			<a href="../using-cog/storage.html" class="sidebar-item active" aria-current="page">Storage</a>
+			<a href="../using-cog/webdav.html" class="sidebar-item">WebDAV</a>
+	</details>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">Apps</summary>
+			<a href="../apps/bookmarks.html" class="sidebar-item">Bookmarks</a>
+			<a href="../apps/calendar.html" class="sidebar-item">Calendar</a>
+			<a href="../apps/contacts.html" class="sidebar-item">Contacts</a>
+			<a href="../apps/dashboard.html" class="sidebar-item">Dashboard</a>
+			<a href="../apps/gallery.html" class="sidebar-item">Gallery</a>
+			<a href="../apps/notes.html" class="sidebar-item">Notes</a>
+			<a href="../apps/rss.html" class="sidebar-item">RSS / News</a>
+			<a href="../apps/tasks.html" class="sidebar-item">Tasks</a>
+	</details>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">Administration</summary>
+			<a href="../admin/backup.html" class="sidebar-item">Backup and Restore</a>
+			<a href="../admin/cli.html" class="sidebar-item">CLI Reference</a>
+			<a href="../admin/email.html" class="sidebar-item">Email Configuration</a>
+			<a href="../admin/https.html" class="sidebar-item">Reaching Cog from Anywhere</a>
+			<a href="../admin/reverse-proxy.html" class="sidebar-item">Reverse Proxy</a>
+			<a href="../admin/updates.html" class="sidebar-item">Updates</a>
+			<a href="../admin/users-and-groups.html" class="sidebar-item">Users and Groups</a>
+			<a href="../admin/volumes.html" class="sidebar-item">Volumes</a>
+	</details>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">NextCloud</summary>
+			<a href="../nextcloud/clients.html" class="sidebar-item">Compatible Clients</a>
+			<a href="../nextcloud/login-flow.html" class="sidebar-item">Login Flow v2</a>
+			<a href="../nextcloud/overview.html" class="sidebar-item">NextCloud Compatibility</a>
+	</details>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">Plugin development</summary>
+			<a href="../plugins/cli-commands.html" class="sidebar-item">CLI Commands</a>
+			<a href="../plugins/custom-builds.html" class="sidebar-item">Custom Builds</a>
+			<a href="../plugins/getting-started.html" class="sidebar-item">Getting Started with Plugin Development</a>
+			<a href="../plugins/databases.html" class="sidebar-item">Plugin Databases</a>
+			<a href="../plugins/plugin-interface.html" class="sidebar-item">Plugin Interface Reference</a>
+			<a href="../plugins/overview.html" class="sidebar-item">Plugin System Overview</a>
+			<a href="../plugins/registration.html" class="sidebar-item">Registration</a>
+			<a href="../plugins/search.html" class="sidebar-item">Search Indexing</a>
+			<a href="../plugins/settings.html" class="sidebar-item">Settings Pages</a>
+			<a href="../plugins/sharing.html" class="sidebar-item">Sharing Resources</a>
+			<a href="../plugins/grpc-plugins.html" class="sidebar-item">gRPC Plugins</a>
+	</details>
+</nav>
+		<article class="sidebar-content prose docs-page">
+<h1 id="storage">Storage</h1>
+<p><strong>Settings &gt; Storage</strong> shows how much space you use, and what else is in your files besides what you put there yourself: storage someone shared with you, and your own WebDAV servers.</p>
+<h2 id="usage">Usage</h2>
+<p>How much you keep in Cog, and your limit if your administrator set one. It counts your files, what apps keep for you, and your calendars and contacts. Files in a mount count towards the volume they are on instead.</p>
+<h2 id="mounts">Mounts</h2>
+<p>A mount puts other storage at a folder of your choice in your files, such as <code>/Photos/Family</code>. Its files then show in the file browser, over WebDAV and over SFTP, like your own.</p>
+<p>There are three kinds:</p>
+<ul>
+<li><strong>A volume</strong>: a whole volume, or a folder of one (the <strong>Subpath</strong>), that you own or that someone shared with you.</li>
+<li><strong>Storage</strong> (<em>Storage</em> badge): space of your own on a volume an administrator set aside for that.</li>
+<li><strong>Shared</strong> (<em>Shared</em> badge): a folder someone shared with you.</li>
+</ul>
+<p><strong>Access</strong> says whether you can change the files or only read them. That is up to whoever shared it.</p>
+<p><strong>Remove</strong> takes a mount out of your files. The files themselves stay where they are.</p>
+<h2 id="adding-a-mount">Adding a mount</h2>
+<p>Under <strong>Add a mount</strong>, pick the volume, type the folder to put it at (<strong>Path</strong>), and if you want only part of it, the folder inside it (<strong>Subpath</strong>).</p>
+<p>Folders shared with you, and storage shared with you, are added from <strong>Files &gt; Shared with me</strong> instead: open the share and click <strong>Add to my files</strong> or <strong>Add storage</strong>.</p>
+<h2 id="your-own-volumes">Your own volumes</h2>
+<p><strong>My volumes</strong> are storage you add yourself: a WebDAV server, such as another Cog, a NextCloud, or a NAS. Fill in <strong>Add a WebDAV volume</strong> with its address and how to sign in to it, then mount it under <strong>Mounts</strong>.</p>
+<p>From the list you can <strong>Browse</strong> a volume, <strong>Share</strong> it with other people or groups (they can then mount it too), or <strong>Delete</strong> it.</p>
+
+		</article>
+	</div>
+</main>
+</body>
+</html>
+
+

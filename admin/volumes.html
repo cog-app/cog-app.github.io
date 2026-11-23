@@ -42,10 +42,12 @@
 		<summary class="sidebar-heading">Using Cog</summary>
 			<a href="../using-cog/app-passwords.html" class="sidebar-item">App Passwords</a>
 			<a href="../using-cog/files.html" class="sidebar-item">Files</a>
+			<a href="../using-cog/groups.html" class="sidebar-item">Groups</a>
 			<a href="../using-cog/mfa.html" class="sidebar-item">Multi-Factor Authentication</a>
 			<a href="../using-cog/sftp.html" class="sidebar-item">SFTP</a>
 			<a href="../using-cog/search.html" class="sidebar-item">Search</a>
 			<a href="../using-cog/sharing.html" class="sidebar-item">Sharing</a>
+			<a href="../using-cog/storage.html" class="sidebar-item">Storage</a>
 			<a href="../using-cog/webdav.html" class="sidebar-item">WebDAV</a>
 	</details>
 	<details class="sidebar-section">
@@ -123,13 +125,13 @@
 <h2 id="system-vs-user-volumes">System vs user volumes</h2>
 <ul>
 <li><strong>System volumes</strong> are created by admins and have no owner. They can be shared with any user or group.</li>
-<li><strong>User volumes</strong> are created by individual users from <strong>Settings &gt; Storage</strong> for their own use.</li>
+<li><strong>User volumes</strong> are created by individual users from <strong>Settings &gt; Storage</strong> for their own use (see <a href="../using-cog/storage.html#your-own-volumes">Storage</a>).</li>
 </ul>
 <h2 id="mounting-volumes">Mounting volumes</h2>
 <p>Volumes must be mounted into a user's virtual filesystem before they can access the contents.</p>
 <pre tabindex="0" style="background-color:#fff;"><code><span style="display:flex;"><span>cog volume mount shared-photos alice /Photos/Shared
 </span></span></code></pre><p>This makes the volume's contents appear at <code>/Photos/Shared</code> in Alice's file browser, WebDAV, and SFTP.</p>
-<p>Users can also mount volumes themselves from <strong>Settings &gt; Storage</strong> in the web UI.</p>
+<p>Users mount volumes shared with them themselves: see <a href="../using-cog/storage.html">Storage</a>.</p>
 <h2 id="sharing-volumes">Sharing volumes</h2>
 <p>Volumes are shareable resources. Share a system volume with a group so all members can mount it:</p>
 <ol>

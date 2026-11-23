@@ -42,10 +42,12 @@
 		<summary class="sidebar-heading">Using Cog</summary>
 			<a href="../using-cog/app-passwords.html" class="sidebar-item">App Passwords</a>
 			<a href="../using-cog/files.html" class="sidebar-item">Files</a>
+			<a href="../using-cog/groups.html" class="sidebar-item">Groups</a>
 			<a href="../using-cog/mfa.html" class="sidebar-item">Multi-Factor Authentication</a>
 			<a href="../using-cog/sftp.html" class="sidebar-item">SFTP</a>
 			<a href="../using-cog/search.html" class="sidebar-item">Search</a>
 			<a href="../using-cog/sharing.html" class="sidebar-item">Sharing</a>
+			<a href="../using-cog/storage.html" class="sidebar-item">Storage</a>
 			<a href="../using-cog/webdav.html" class="sidebar-item">WebDAV</a>
 	</details>
 	<details class="sidebar-section">
@@ -112,23 +114,15 @@
 </span></span></code></pre><h3 id="quotas">Quotas</h3>
 <p>Admins can set storage quotas per user from the admin panel at <strong>Admin &gt; Users &gt; Edit User</strong>. Quotas limit the total file storage for a user. Uploads that would exceed the quota are rejected.</p>
 <h2 id="groups">Groups</h2>
-<p>Groups are collections of users. Groups can contain other groups for nested membership.</p>
-<h3 id="creating-groups">Creating groups</h3>
+<p>Groups are collections of users, and can contain other groups. Anyone can create a group and manage the ones they own: see <a href="../using-cog/groups.html">Groups</a> for how owners and members use them. This section is what an administrator has besides.</p>
+<h3 id="managing-groups">Managing groups</h3>
+<p><strong>Admin &gt; Groups</strong> lists every group, whoever owns it. An administrator can manage any group as its owner would, and delete one.</p>
+<p>From the command line:</p>
 <pre tabindex="0" style="background-color:#fff;"><code><span style="display:flex;"><span>cog group create engineering
 </span></span><span style="display:flex;"><span>cog group add-member engineering alice
 </span></span><span style="display:flex;"><span>cog group add-member engineering bob
-</span></span></code></pre><p>Groups can also be managed from the web UI at <strong>Settings &gt; Groups</strong> (for groups you own) or <strong>Admin &gt; Groups</strong> (for system-wide management).</p>
-<h3 id="group-nesting">Group nesting</h3>
-<p>Groups can contain other groups:</p>
-<ul>
-<li>Group &quot;Engineering&quot; contains users Alice, Bob, and group &quot;Frontend&quot;</li>
-<li>Group &quot;Frontend&quot; contains user Charlie</li>
-<li>Sharing a resource with &quot;Engineering&quot; grants access to Alice, Bob, and Charlie</li>
-</ul>
-<h3 id="invitations">Invitations</h3>
-<p>Group owners can invite users via invitation links. Invited users can accept from a link without needing admin intervention.</p>
-<h3 id="sharing-with-groups">Sharing with groups</h3>
-<p>Any shareable resource (files, calendars, bookmarks folders, etc.) can be shared with a group. All current and future members of the group receive the specified permissions. See <a href="../using-cog/sharing.html">Sharing</a> for details.</p>
+</span></span></code></pre><h3 id="invitations-by-email">Invitations by email</h3>
+<p>Owners can invite people by email only when <a href="email.html">email</a> is set up. Without it, they get a link to send themselves.</p>
 
 		</article>
 	</div>
