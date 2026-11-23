@@ -778,6 +778,132 @@
     }
   });
 
+  // --- Help popovers -----------------------------------------------------------
+  // a[data-help] (ui.Help) links to a heading in the docs. Hovering or
+  // focusing it shows that heading's part (/docs/page.html?part=id) in a
+  // popover, which the pointer can move into to follow its links.
+  var helpParts = {};
+  var helpPop = null;
+  var helpFor = null;
+  var helpShowTimer = 0;
+  var helpHideTimer = 0;
+
+  function helpPart(a) {
+    var u = new URL(a.href);
+    var id = decodeURIComponent(u.hash.slice(1));
+    u.hash = "";
+    u.searchParams.set("part", id);
+    var key = u.toString();
+    if (!helpParts[key]) {
+      helpParts[key] = fetch(key, { credentials: "same-origin" }).then(
+        function (r) {
+          if (!r.ok) throw new Error(key + ": " + r.status + " " + r.statusText);
+          return r.text();
+        },
+      );
+      // A failure is not remembered: the next hover tries again.
+      helpParts[key].catch(function () {
+        delete helpParts[key];
+      });
+    }
+    return helpParts[key];
+  }
+
+  function helpPopover() {
+    if (helpPop) return helpPop;
+    helpPop = document.createElement("div");
+    helpPop.id = "help-popover";
+    helpPop.className = "help-popover prose";
+    helpPop.setAttribute("role", "tooltip");
+    helpPop.hidden = true;
+    helpPop.addEventListener("pointerenter", function () {
+      clearTimeout(helpHideTimer);
+    });
+    helpPop.addEventListener("pointerleave", hideHelpSoon);
+    document.body.appendChild(helpPop);
+    return helpPop;
+  }
+
+  function placeHelp(a, pop) {
+    var r = a.getBoundingClientRect();
+    var gap = 6;
+    var w = pop.offsetWidth;
+    var h = pop.offsetHeight;
+    var left = Math.min(r.left, window.innerWidth - w - 8);
+    var top = r.bottom + gap;
+    if (top + h > window.innerHeight && r.top - gap - h > 0) top = r.top - gap - h;
+    pop.style.left = Math.max(8, left) + window.scrollX + "px";
+    pop.style.top = top + window.scrollY + "px";
+  }
+
+  function showHelp(a) {
+    clearTimeout(helpHideTimer);
+    helpFor = a;
+    helpPart(a).then(
+      function (html) {
+        if (helpFor !== a) return;
+        var pop = helpPopover();
+        pop.innerHTML = html;
+        // The part's links are relative to its page, not to this one.
+        pop.querySelectorAll("[href], [src]").forEach(function (el) {
+          var attr = el.hasAttribute("href") ? "href" : "src";
+          el.setAttribute(attr, new URL(el.getAttribute(attr), a.href).toString());
+          if (attr === "href") el.target = "_blank";
+        });
+        var more = document.createElement("a");
+        more.className = "help-more";
+        more.href = a.href;
+        more.target = "_blank";
+        more.rel = "noopener";
+        more.textContent = "Read more in the docs";
+        pop.appendChild(more);
+        pop.hidden = false;
+        placeHelp(a, pop);
+        a.setAttribute("aria-describedby", pop.id);
+      },
+      function (err) {
+        console.error("help:", err);
+      },
+    );
+  }
+
+  function hideHelp() {
+    clearTimeout(helpShowTimer);
+    if (helpFor) helpFor.removeAttribute("aria-describedby");
+    helpFor = null;
+    if (helpPop) helpPop.hidden = true;
+  }
+
+  function hideHelpSoon() {
+    clearTimeout(helpShowTimer);
+    clearTimeout(helpHideTimer);
+    helpHideTimer = setTimeout(hideHelp, 200);
+  }
+
+  document.addEventListener("pointerover", function (e) {
+    var a = e.target.closest && e.target.closest("a[data-help]");
+    if (!a || a === helpFor || e.pointerType === "touch") return;
+    clearTimeout(helpShowTimer);
+    clearTimeout(helpHideTimer);
+    helpShowTimer = setTimeout(function () {
+      showHelp(a);
+    }, 250);
+  });
+  document.addEventListener("pointerout", function (e) {
+    var a = e.target.closest && e.target.closest("a[data-help]");
+    if (a && !a.contains(e.relatedTarget)) hideHelpSoon();
+  });
+  document.addEventListener("focusin", function (e) {
+    var a = e.target.closest && e.target.closest("a[data-help]");
+    if (a) showHelp(a);
+  });
+  document.addEventListener("focusout", function (e) {
+    if (e.target.closest && e.target.closest("a[data-help]")) hideHelpSoon();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && helpPop && !helpPop.hidden) hideHelp();
+  });
+
   // --- Flash placement ----------------------------------------------------------
   // The layout renders a redirect's message at the top of <main>. On a page
   // with a sidebar it belongs above the content column, not above the sidebar.
