@@ -3,298 +3,104 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Getting Started with Plugin Development — Cog Documentation</title>
-<style>
-:root {
-  --sidebar-w: 260px;
-  --fg: #1a1a2e;
-  --bg: #fff;
-  --sidebar-bg: #f5f6f8;
-  --sidebar-border: #e0e0e0;
-  --link: #2563eb;
-  --link-hover: #1d4ed8;
-  --active-bg: #e0e7ff;
-  --active-fg: #1e40af;
-  --code-bg: #f4f4f5;
-  --pre-bg: #272822;
-  --pre-fg: #f8f8f2;
-  --table-border: #d1d5db;
-  --table-stripe: #f9fafb;
-  --heading: #111827;
-  --muted: #6b7280;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --fg: #e5e7eb;
-    --bg: #111827;
-    --sidebar-bg: #1f2937;
-    --sidebar-border: #374151;
-    --link: #60a5fa;
-    --link-hover: #93bbfd;
-    --active-bg: #1e3a5f;
-    --active-fg: #93bbfd;
-    --code-bg: #1f2937;
-    --pre-bg: #0d1117;
-    --pre-fg: #e6edf3;
-    --table-border: #374151;
-    --table-stripe: #1f2937;
-    --heading: #f9fafb;
-    --muted: #9ca3af;
-  }
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  color: var(--fg);
-  background: var(--bg);
-  line-height: 1.6;
-}
-a { color: var(--link); text-decoration: none; }
-a:hover { color: var(--link-hover); text-decoration: underline; }
-
- 
-.sidebar {
-  position: fixed; top: 0; left: 0; bottom: 0;
-  width: var(--sidebar-w);
-  background: var(--sidebar-bg);
-  border-right: 1px solid var(--sidebar-border);
-  overflow-y: auto;
-  padding: 1.5rem 0;
-  z-index: 10;
-}
-.content {
-  margin-left: var(--sidebar-w);
-  max-width: 52rem;
-  padding: 2rem 2.5rem;
-}
-
- 
-.sidebar .logo {
-  padding: 0 1.25rem 1rem;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--heading);
-}
-.sidebar .logo a { color: inherit; }
-.sidebar .section-label {
-  padding: 0.75rem 1.25rem 0.25rem;
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--muted);
-}
-.sidebar ul { list-style: none; }
-.sidebar li a {
-  display: block;
-  padding: 0.25rem 1.25rem 0.25rem 1.75rem;
-  font-size: 0.875rem;
-  color: var(--fg);
-  border-left: 3px solid transparent;
-}
-.sidebar li a:hover {
-  background: var(--active-bg);
-  text-decoration: none;
-}
-.sidebar li a.active {
-  background: var(--active-bg);
-  color: var(--active-fg);
-  border-left-color: var(--active-fg);
-  font-weight: 600;
-}
-
- 
-.menu-toggle { display: none; }
-@media (max-width: 768px) {
-  .sidebar { transform: translateX(-100%); transition: transform 0.2s; }
-  .sidebar.open { transform: translateX(0); }
-  .content { margin-left: 0; padding: 1rem; }
-  .menu-toggle {
-    display: block; position: fixed; top: 0.75rem; left: 0.75rem;
-    z-index: 20; background: var(--sidebar-bg); border: 1px solid var(--sidebar-border);
-    border-radius: 4px; padding: 0.4rem 0.6rem; cursor: pointer;
-    font-size: 1.25rem; color: var(--fg); line-height: 1;
-  }
-}
-
- 
-.content h1 { font-size: 2rem; margin: 0 0 1rem; color: var(--heading); }
-.content h2 { font-size: 1.4rem; margin: 2rem 0 0.75rem; color: var(--heading); border-bottom: 1px solid var(--sidebar-border); padding-bottom: 0.3rem; }
-.content h3 { font-size: 1.15rem; margin: 1.5rem 0 0.5rem; color: var(--heading); }
-.content h4 { font-size: 1rem; margin: 1.25rem 0 0.5rem; color: var(--heading); }
-.content p { margin: 0.75rem 0; }
-.content ul, .content ol { margin: 0.75rem 0; padding-left: 1.5rem; }
-.content li { margin: 0.25rem 0; }
-.content blockquote {
-  border-left: 3px solid var(--link);
-  padding: 0.5rem 1rem;
-  margin: 1rem 0;
-  color: var(--muted);
-  background: var(--code-bg);
-}
-.content code {
-  background: var(--code-bg);
-  padding: 0.15em 0.35em;
-  border-radius: 3px;
-  font-size: 0.9em;
-}
-.content pre {
-  background: var(--pre-bg);
-  color: var(--pre-fg);
-  padding: 1rem;
-  border-radius: 6px;
-  overflow-x: auto;
-  margin: 1rem 0;
-  line-height: 1.5;
-}
-.content pre code {
-  background: none;
-  padding: 0;
-  font-size: 0.85rem;
-}
-.content table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 1rem 0;
-  font-size: 0.9rem;
-}
-.content th, .content td {
-  border: 1px solid var(--table-border);
-  padding: 0.5rem 0.75rem;
-  text-align: left;
-}
-.content th { background: var(--sidebar-bg); font-weight: 600; }
-.content tr:nth-child(even) { background: var(--table-stripe); }
-.content hr { border: none; border-top: 1px solid var(--sidebar-border); margin: 2rem 0; }
-.content img { max-width: 100%; }
-</style>
+<title>Getting Started with Plugin Development — Cog docs</title>
+<link rel="stylesheet" href="../static/style.css">
+<link rel="icon" href="../static/favicon.svg" type="image/svg+xml">
+<script src="../static/cog.js"></script>
+<script src="../static/docs-search.js" defer></script>
 </head>
-<body>
-<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
-<nav class="sidebar">
-  <div class="logo"><a href="../index.html">Cog</a></div>
-  
-  <div class="section-label">Getting Started</div>
-  <ul>
-    
-    <li><a href="../getting-started/configuration.html">Configuration</a></li>
-    
-    <li><a href="../getting-started/first-run.html">First Run</a></li>
-    
-    <li><a href="../getting-started/installation.html">Installation</a></li>
-    
-  </ul>
-  
-  <div class="section-label">Administration</div>
-  <ul>
-    
-    <li><a href="../admin/backup.html">Backup and Restore</a></li>
-    
-    <li><a href="../admin/cli.html">CLI Reference</a></li>
-    
-    <li><a href="../admin/email.html">Email Configuration</a></li>
-    
-    <li><a href="../admin/https.html">Reaching Cog from Anywhere</a></li>
-    
-    <li><a href="../admin/reverse-proxy.html">Reverse Proxy</a></li>
-    
-    <li><a href="../admin/updates.html">Updates</a></li>
-    
-    <li><a href="../admin/users-and-groups.html">Users and Groups</a></li>
-    
-    <li><a href="../admin/volumes.html">Volumes</a></li>
-    
-  </ul>
-  
-  <div class="section-label">Using Cog</div>
-  <ul>
-    
-    <li><a href="../using-cog/app-passwords.html">App Passwords</a></li>
-    
-    <li><a href="../using-cog/files.html">Files</a></li>
-    
-    <li><a href="../using-cog/mfa.html">Multi-Factor Authentication</a></li>
-    
-    <li><a href="../using-cog/sftp.html">SFTP</a></li>
-    
-    <li><a href="../using-cog/search.html">Search</a></li>
-    
-    <li><a href="../using-cog/sharing.html">Sharing</a></li>
-    
-    <li><a href="../using-cog/webdav.html">WebDAV</a></li>
-    
-  </ul>
-  
-  <div class="section-label">Apps</div>
-  <ul>
-    
-    <li><a href="../apps/bookmarks.html">Bookmarks</a></li>
-    
-    <li><a href="../apps/calendar.html">Calendar</a></li>
-    
-    <li><a href="../apps/contacts.html">Contacts</a></li>
-    
-    <li><a href="../apps/dashboard.html">Dashboard</a></li>
-    
-    <li><a href="../apps/gallery.html">Gallery</a></li>
-    
-    <li><a href="../apps/notes.html">Notes</a></li>
-    
-    <li><a href="../apps/rss.html">RSS / News</a></li>
-    
-    <li><a href="../apps/tasks.html">Tasks</a></li>
-    
-  </ul>
-  
-  <div class="section-label">NextCloud</div>
-  <ul>
-    
-    <li><a href="../nextcloud/clients.html">Compatible Clients</a></li>
-    
-    <li><a href="../nextcloud/login-flow.html">Login Flow v2</a></li>
-    
-    <li><a href="../nextcloud/overview.html">NextCloud Compatibility</a></li>
-    
-  </ul>
-  
-  <div class="section-label">Plugin Development</div>
-  <ul>
-    
-    <li><a href="../plugins/cli-commands.html">CLI Commands</a></li>
-    
-    <li><a href="../plugins/custom-builds.html">Custom Builds</a></li>
-    
-    <li><a href="../plugins/getting-started.html" class="active">Getting Started with Plugin Development</a></li>
-    
-    <li><a href="../plugins/databases.html">Plugin Databases</a></li>
-    
-    <li><a href="../plugins/plugin-interface.html">Plugin Interface Reference</a></li>
-    
-    <li><a href="../plugins/overview.html">Plugin System Overview</a></li>
-    
-    <li><a href="../plugins/registration.html">Registration</a></li>
-    
-    <li><a href="../plugins/search.html">Search Indexing</a></li>
-    
-    <li><a href="../plugins/settings.html">Settings Pages</a></li>
-    
-    <li><a href="../plugins/sharing.html">Sharing Resources</a></li>
-    
-    <li><a href="../plugins/grpc-plugins.html">gRPC Plugins</a></li>
-    
-  </ul>
-  
+<body class="docs">
+<nav class="navbar" aria-label="Main">
+	<a class="navbar-brand" href="../index.html" aria-label="Cog docs home">
+		<img src="../static/favicon.svg" width="20" height="20" alt="">
+		<span class="brand-text">Cog docs</span>
+	</a>
+	<div class="navbar-spacer"></div>
+	<div class="navbar-search" role="search">
+		<label class="sr-only" for="search-box">Search the docs</label>
+		<input type="search" id="search-box" class="form-control search-input" placeholder="Search the docs (/)…" autocomplete="off" aria-controls="search-results" data-docs-index="../search.json" data-docs-root="../">
+		<div id="search-results" class="search-results" aria-live="polite"></div>
+	</div>
+	<button type="button" class="btn-icon search-toggle" data-search-open aria-label="Search" aria-expanded="false" aria-controls="search-box">
+		<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+	</button>
+	<div class="navbar-end">
+		<a class="btn btn-primary btn-sm" href="https://github.com/cog-app/cog/releases/latest">Download</a>
+	</div>
 </nav>
 <main class="content">
+	<div class="sidebar-layout">
+<nav class="sidebar docs-sidebar" aria-label="Documentation">
+			<a href="../index.html" class="sidebar-item">Overview</a>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">Getting started</summary>
+			<a href="../getting-started/configuration.html" class="sidebar-item">Configuration</a>
+			<a href="../getting-started/first-run.html" class="sidebar-item">First Run</a>
+			<a href="../getting-started/installation.html" class="sidebar-item">Installation</a>
+	</details>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">Using Cog</summary>
+			<a href="../using-cog/app-passwords.html" class="sidebar-item">App Passwords</a>
+			<a href="../using-cog/files.html" class="sidebar-item">Files</a>
+			<a href="../using-cog/mfa.html" class="sidebar-item">Multi-Factor Authentication</a>
+			<a href="../using-cog/sftp.html" class="sidebar-item">SFTP</a>
+			<a href="../using-cog/search.html" class="sidebar-item">Search</a>
+			<a href="../using-cog/sharing.html" class="sidebar-item">Sharing</a>
+			<a href="../using-cog/webdav.html" class="sidebar-item">WebDAV</a>
+	</details>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">Apps</summary>
+			<a href="../apps/bookmarks.html" class="sidebar-item">Bookmarks</a>
+			<a href="../apps/calendar.html" class="sidebar-item">Calendar</a>
+			<a href="../apps/contacts.html" class="sidebar-item">Contacts</a>
+			<a href="../apps/dashboard.html" class="sidebar-item">Dashboard</a>
+			<a href="../apps/gallery.html" class="sidebar-item">Gallery</a>
+			<a href="../apps/notes.html" class="sidebar-item">Notes</a>
+			<a href="../apps/rss.html" class="sidebar-item">RSS / News</a>
+			<a href="../apps/tasks.html" class="sidebar-item">Tasks</a>
+	</details>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">Administration</summary>
+			<a href="../admin/backup.html" class="sidebar-item">Backup and Restore</a>
+			<a href="../admin/cli.html" class="sidebar-item">CLI Reference</a>
+			<a href="../admin/email.html" class="sidebar-item">Email Configuration</a>
+			<a href="../admin/https.html" class="sidebar-item">Reaching Cog from Anywhere</a>
+			<a href="../admin/reverse-proxy.html" class="sidebar-item">Reverse Proxy</a>
+			<a href="../admin/updates.html" class="sidebar-item">Updates</a>
+			<a href="../admin/users-and-groups.html" class="sidebar-item">Users and Groups</a>
+			<a href="../admin/volumes.html" class="sidebar-item">Volumes</a>
+	</details>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">NextCloud</summary>
+			<a href="../nextcloud/clients.html" class="sidebar-item">Compatible Clients</a>
+			<a href="../nextcloud/login-flow.html" class="sidebar-item">Login Flow v2</a>
+			<a href="../nextcloud/overview.html" class="sidebar-item">NextCloud Compatibility</a>
+	</details>
+	<details class="sidebar-section" open>
+		<summary class="sidebar-heading">Plugin development</summary>
+			<a href="../plugins/cli-commands.html" class="sidebar-item">CLI Commands</a>
+			<a href="../plugins/custom-builds.html" class="sidebar-item">Custom Builds</a>
+			<a href="../plugins/getting-started.html" class="sidebar-item active" aria-current="page">Getting Started with Plugin Development</a>
+			<a href="../plugins/databases.html" class="sidebar-item">Plugin Databases</a>
+			<a href="../plugins/plugin-interface.html" class="sidebar-item">Plugin Interface Reference</a>
+			<a href="../plugins/overview.html" class="sidebar-item">Plugin System Overview</a>
+			<a href="../plugins/registration.html" class="sidebar-item">Registration</a>
+			<a href="../plugins/search.html" class="sidebar-item">Search Indexing</a>
+			<a href="../plugins/settings.html" class="sidebar-item">Settings Pages</a>
+			<a href="../plugins/sharing.html" class="sidebar-item">Sharing Resources</a>
+			<a href="../plugins/grpc-plugins.html" class="sidebar-item">gRPC Plugins</a>
+	</details>
+</nav>
+		<article class="sidebar-content prose docs-page">
 <h1 id="getting-started-with-plugin-development">Getting Started with Plugin Development</h1>
 <p>This guide walks through building a minimal Cog plugin from scratch.</p>
 <h2 id="the-plugin-interface">The Plugin interface</h2>
 <p>Every plugin implements four methods:</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Plugin</span> <span style="color:#66d9ef">interface</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ID</span>() <span style="color:#66d9ef">string</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Register</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">PluginContext</span>) <span style="color:#66d9ef">error</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Start</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>) <span style="color:#66d9ef">error</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Stop</span>() <span style="color:#66d9ef">error</span>
+<pre tabindex="0" style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000;font-weight:bold">type</span> Plugin <span style="color:#000;font-weight:bold">interface</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#900;font-weight:bold">ID</span>() <span style="color:#458;font-weight:bold">string</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#900;font-weight:bold">Register</span>(ctx PluginContext) <span style="color:#458;font-weight:bold">error</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#900;font-weight:bold">Start</span>(ctx context.Context) <span style="color:#458;font-weight:bold">error</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#900;font-weight:bold">Stop</span>() <span style="color:#458;font-weight:bold">error</span>
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre><ul>
 <li><strong>ID</strong> -- unique string identifier (e.g. <code>&quot;myplugin&quot;</code>)</li>
@@ -304,104 +110,104 @@ a:hover { color: var(--link-hover); text-decoration: underline; }
 </ul>
 <h2 id="minimal-example">Minimal example</h2>
 <p>Create a new Go module for your plugin:</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span>mkdir cog-hello <span style="color:#f92672">&amp;&amp;</span> cd cog-hello
+<pre tabindex="0" style="background-color:#fff;"><code><span style="display:flex;"><span>mkdir cog-hello <span style="color:#000;font-weight:bold">&amp;&amp;</span> <span style="color:#0086b3">cd</span> cog-hello
 </span></span><span style="display:flex;"><span>go mod init example.com/cog-hello
 </span></span><span style="display:flex;"><span>go get git.duckfam.us/jj-software/cog
 </span></span></code></pre><p>Create <code>hello.go</code>:</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">hello</span>
+<pre tabindex="0" style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000;font-weight:bold">package</span> hello
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;context&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;fmt&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;context&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;net/http&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;git.duckfam.us/jj-software/cog/plugin&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;git.duckfam.us/jj-software/cog/plugin&#34;</span>
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Hello</span> <span style="color:#66d9ef">struct</span>{}
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">type</span> Hello <span style="color:#000;font-weight:bold">struct</span>{}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">New</span>() <span style="color:#f92672">*</span><span style="color:#a6e22e">Hello</span> { <span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">Hello</span>{} }
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">New</span>() <span style="color:#000;font-weight:bold">*</span>Hello { <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">&amp;</span>Hello{} }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">h</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Hello</span>) <span style="color:#a6e22e">ID</span>() <span style="color:#66d9ef">string</span> { <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;hello&#34;</span> }
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">func</span> (h <span style="color:#000;font-weight:bold">*</span>Hello) <span style="color:#900;font-weight:bold">ID</span>() <span style="color:#458;font-weight:bold">string</span> { <span style="color:#000;font-weight:bold">return</span> <span style="color:#d14">&#34;hello&#34;</span> }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">h</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Hello</span>) <span style="color:#a6e22e">Register</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">plugin</span>.<span style="color:#a6e22e">PluginContext</span>) <span style="color:#66d9ef">error</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Add a navigation entry
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">RegisterNavItem</span>(<span style="color:#a6e22e">plugin</span>.<span style="color:#a6e22e">NavItem</span>{
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Label</span>: <span style="color:#e6db74">&#34;Hello&#34;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">URL</span>:   <span style="color:#e6db74">&#34;/apps/hello&#34;</span>,
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">func</span> (h <span style="color:#000;font-weight:bold">*</span>Hello) <span style="color:#900;font-weight:bold">Register</span>(ctx plugin.PluginContext) <span style="color:#458;font-weight:bold">error</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">// Add a navigation entry
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    ctx.<span style="color:#900;font-weight:bold">RegisterNavItem</span>(plugin.NavItem{
+</span></span><span style="display:flex;"><span>        Label: <span style="color:#d14">&#34;Hello&#34;</span>,
+</span></span><span style="display:flex;"><span>        URL:   <span style="color:#d14">&#34;/apps/hello&#34;</span>,
 </span></span><span style="display:flex;"><span>    })
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Register a page at GET /apps/hello/
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">RegisterPage</span>(<span style="color:#e6db74">&#34;{$}&#34;</span>, <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">user</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">plugin</span>.<span style="color:#a6e22e">UserFromContext</span>(<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Context</span>())
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;&lt;h1&gt;Hello, %s!&lt;/h1&gt;&#34;</span>, <span style="color:#a6e22e">user</span>.<span style="color:#a6e22e">Username</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">// Register a page at GET /apps/hello/
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    ctx.<span style="color:#900;font-weight:bold">RegisterPage</span>(<span style="color:#d14">&#34;{$}&#34;</span>, http.<span style="color:#900;font-weight:bold">HandlerFunc</span>(<span style="color:#000;font-weight:bold">func</span>(w http.ResponseWriter, r <span style="color:#000;font-weight:bold">*</span>http.Request) {
+</span></span><span style="display:flex;"><span>        user <span style="color:#000;font-weight:bold">:=</span> plugin.<span style="color:#900;font-weight:bold">UserFromContext</span>(r.<span style="color:#900;font-weight:bold">Context</span>())
+</span></span><span style="display:flex;"><span>        fmt.<span style="color:#900;font-weight:bold">Fprintf</span>(w, <span style="color:#d14">&#34;&lt;h1&gt;Hello, %s!&lt;/h1&gt;&#34;</span>, user.Username)
 </span></span><span style="display:flex;"><span>    }))
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Register a POST action at POST /apps/hello/greet
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">RegisterAction</span>(<span style="color:#e6db74">&#34;POST&#34;</span>, <span style="color:#e6db74">&#34;greet&#34;</span>, <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">Header</span>().<span style="color:#a6e22e">Set</span>(<span style="color:#e6db74">&#34;HX-Redirect&#34;</span>, <span style="color:#e6db74">&#34;/apps/hello&#34;</span>)
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">w</span>.<span style="color:#a6e22e">WriteHeader</span>(<span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">StatusNoContent</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">// Register a POST action at POST /apps/hello/greet
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    ctx.<span style="color:#900;font-weight:bold">RegisterAction</span>(<span style="color:#d14">&#34;POST&#34;</span>, <span style="color:#d14">&#34;greet&#34;</span>, http.<span style="color:#900;font-weight:bold">HandlerFunc</span>(<span style="color:#000;font-weight:bold">func</span>(w http.ResponseWriter, r <span style="color:#000;font-weight:bold">*</span>http.Request) {
+</span></span><span style="display:flex;"><span>        w.<span style="color:#900;font-weight:bold">Header</span>().<span style="color:#900;font-weight:bold">Set</span>(<span style="color:#d14">&#34;HX-Redirect&#34;</span>, <span style="color:#d14">&#34;/apps/hello&#34;</span>)
+</span></span><span style="display:flex;"><span>        w.<span style="color:#900;font-weight:bold">WriteHeader</span>(http.StatusNoContent)
 </span></span><span style="display:flex;"><span>    }))
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">nil</span>
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">h</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Hello</span>) <span style="color:#a6e22e">Start</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>) <span style="color:#66d9ef">error</span> { <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span> }
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">h</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Hello</span>) <span style="color:#a6e22e">Stop</span>() <span style="color:#66d9ef">error</span>                     { <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span> }
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">func</span> (h <span style="color:#000;font-weight:bold">*</span>Hello) <span style="color:#900;font-weight:bold">Start</span>(ctx context.Context) <span style="color:#458;font-weight:bold">error</span> { <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">nil</span> }
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">func</span> (h <span style="color:#000;font-weight:bold">*</span>Hello) <span style="color:#900;font-weight:bold">Stop</span>() <span style="color:#458;font-weight:bold">error</span>                     { <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">nil</span> }
 </span></span></code></pre><h2 id="wire-it-into-a-custom-build">Wire it into a custom build</h2>
 <p>Create <code>cmd/cog-custom/main.go</code>:</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+<pre tabindex="0" style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000;font-weight:bold">package</span> main
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;git.duckfam.us/jj-software/cog&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;example.com/cog-hello&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;git.duckfam.us/jj-software/cog&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;example.com/cog-hello&#34;</span>
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">cog</span>.<span style="color:#a6e22e">Main</span>(<span style="color:#a6e22e">hello</span>.<span style="color:#a6e22e">New</span>())
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">func</span> <span style="color:#900;font-weight:bold">main</span>() {
+</span></span><span style="display:flex;"><span>    cog.<span style="color:#900;font-weight:bold">Main</span>(hello.<span style="color:#900;font-weight:bold">New</span>())
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre><p>The built-in plugins (Dashboard, Files, Calendar, etc.) are automatically included. Your plugin is added alongside them.</p>
 <p>Build and run:</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span>go run ./cmd/cog-custom
+<pre tabindex="0" style="background-color:#fff;"><code><span style="display:flex;"><span>go run ./cmd/cog-custom
 </span></span></code></pre><p>Visit <code>http://localhost:8580</code> and you'll see &quot;Hello&quot; in the navigation bar.</p>
 <h2 id="adding-a-database">Adding a database</h2>
 <p>Most plugins need per-user data storage. Cog provides SQLite databases automatically.</p>
 <p>Create <code>sql/schema.sql</code>:</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">TABLE</span> <span style="color:#66d9ef">IF</span> <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">EXISTS</span> greetings (
-</span></span><span style="display:flex;"><span>    id INTEGER <span style="color:#66d9ef">PRIMARY</span> <span style="color:#66d9ef">KEY</span>,
-</span></span><span style="display:flex;"><span>    message TEXT <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span>,
-</span></span><span style="display:flex;"><span>    created_at INTEGER <span style="color:#66d9ef">NOT</span> <span style="color:#66d9ef">NULL</span> <span style="color:#66d9ef">DEFAULT</span> (unixepoch())
-</span></span><span style="display:flex;"><span>);
-</span></span></code></pre><p>Embed it and run migrations in Register:</p>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#f92672">import</span> <span style="color:#e6db74">&#34;embed&#34;</span>
+<pre tabindex="0" style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000;font-weight:bold">CREATE</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">TABLE</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">IF</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">NOT</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">EXISTS</span><span style="color:#bbb"> </span>greetings<span style="color:#bbb"> </span>(<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>id<span style="color:#bbb"> </span><span style="color:#0086b3">INTEGER</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">PRIMARY</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">KEY</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>message<span style="color:#bbb"> </span><span style="color:#0086b3">TEXT</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">NOT</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">NULL</span>,<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>created_at<span style="color:#bbb"> </span><span style="color:#0086b3">INTEGER</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">NOT</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">NULL</span><span style="color:#bbb"> </span><span style="color:#000;font-weight:bold">DEFAULT</span><span style="color:#bbb"> </span>(unixepoch())<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>);<span style="color:#bbb">
+</span></span></span></code></pre><p>Embed it and run migrations in Register:</p>
+<pre tabindex="0" style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#d14">&#34;embed&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">//go:embed sql
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sqlFS</span> <span style="color:#a6e22e">embed</span>.<span style="color:#a6e22e">FS</span>
+</span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic">//go:embed sql
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span><span style="color:#000;font-weight:bold">var</span> sqlFS embed.FS
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">h</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Hello</span>) <span style="color:#a6e22e">Register</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">plugin</span>.<span style="color:#a6e22e">PluginContext</span>) <span style="color:#66d9ef">error</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Run schema migrations for each user&#39;s plugin DB
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// (migrations run lazily when PluginDB is first opened for a user)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">RegisterPage</span>(<span style="color:#e6db74">&#34;{$}&#34;</span>, <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">HandlerFunc</span>(<span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">w</span> <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">ResponseWriter</span>, <span style="color:#a6e22e">r</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Request</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">db</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">plugin</span>.<span style="color:#a6e22e">UserDB</span>(<span style="color:#a6e22e">r</span>)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Error</span>(<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>(), <span style="color:#ae81ff">500</span>)
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">func</span> (h <span style="color:#000;font-weight:bold">*</span>Hello) <span style="color:#900;font-weight:bold">Register</span>(ctx plugin.PluginContext) <span style="color:#458;font-weight:bold">error</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic">// Run schema migrations for each user&#39;s plugin DB
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    <span style="color:#998;font-style:italic">// (migrations run lazily when PluginDB is first opened for a user)
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>
+</span></span><span style="display:flex;"><span>    ctx.<span style="color:#900;font-weight:bold">RegisterPage</span>(<span style="color:#d14">&#34;{$}&#34;</span>, http.<span style="color:#900;font-weight:bold">HandlerFunc</span>(<span style="color:#000;font-weight:bold">func</span>(w http.ResponseWriter, r <span style="color:#000;font-weight:bold">*</span>http.Request) {
+</span></span><span style="display:flex;"><span>        db, err <span style="color:#000;font-weight:bold">:=</span> plugin.<span style="color:#900;font-weight:bold">UserDB</span>(r)
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">if</span> err <span style="color:#000;font-weight:bold">!=</span> <span style="color:#000;font-weight:bold">nil</span> {
+</span></span><span style="display:flex;"><span>            http.<span style="color:#900;font-weight:bold">Error</span>(w, err.<span style="color:#900;font-weight:bold">Error</span>(), <span style="color:#099">500</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#000;font-weight:bold">return</span>
 </span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">plugin</span>.<span style="color:#a6e22e">Migrate</span>(<span style="color:#a6e22e">db</span>, <span style="color:#a6e22e">sqlFS</span>)
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Use db to query greetings...
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    }))
+</span></span><span style="display:flex;"><span>        plugin.<span style="color:#900;font-weight:bold">Migrate</span>(db, sqlFS)
+</span></span><span style="display:flex;"><span>        <span style="color:#998;font-style:italic">// Use db to query greetings...
+</span></span></span><span style="display:flex;"><span><span style="color:#998;font-style:italic"></span>    }))
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">nil</span>
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre><p>See <a href="databases.html">Databases</a> for the full database guide.</p>
 <h2 id="adding-a-dashboard-widget">Adding a dashboard widget</h2>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#a6e22e">ctx</span>.<span style="color:#a6e22e">RegisterWidget</span>(<span style="color:#a6e22e">plugin</span>.<span style="color:#a6e22e">Widget</span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Title</span>:    <span style="color:#e6db74">&#34;Recent Greetings&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Priority</span>: <span style="color:#ae81ff">50</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Render</span>: <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">ctx</span> <span style="color:#a6e22e">context</span>.<span style="color:#a6e22e">Context</span>, <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">io</span>.<span style="color:#a6e22e">Writer</span>, <span style="color:#a6e22e">userID</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Fprintf</span>(<span style="color:#a6e22e">w</span>, <span style="color:#e6db74">&#34;&lt;p&gt;No greetings yet.&lt;/p&gt;&#34;</span>)
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">nil</span>
+<pre tabindex="0" style="background-color:#fff;"><code><span style="display:flex;"><span>ctx.<span style="color:#900;font-weight:bold">RegisterWidget</span>(plugin.Widget{
+</span></span><span style="display:flex;"><span>    Title:    <span style="color:#d14">&#34;Recent Greetings&#34;</span>,
+</span></span><span style="display:flex;"><span>    Priority: <span style="color:#099">50</span>,
+</span></span><span style="display:flex;"><span>    Render: <span style="color:#000;font-weight:bold">func</span>(ctx context.Context, w io.Writer, userID <span style="color:#458;font-weight:bold">string</span>) <span style="color:#458;font-weight:bold">error</span> {
+</span></span><span style="display:flex;"><span>        fmt.<span style="color:#900;font-weight:bold">Fprintf</span>(w, <span style="color:#d14">&#34;&lt;p&gt;No greetings yet.&lt;/p&gt;&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#000;font-weight:bold">return</span> <span style="color:#000;font-weight:bold">nil</span>
 </span></span><span style="display:flex;"><span>    },
 </span></span><span style="display:flex;"><span>})
 </span></span></code></pre><h2 id="adding-search">Adding search</h2>
@@ -415,6 +221,11 @@ a:hover { color: var(--link-hover); text-decoration: underline; }
 <li><a href="grpc-plugins.html">gRPC Plugins</a> -- building out-of-process plugins</li>
 </ul>
 
+			<p class="docs-version">For Cog dev</p>
+		</article>
+	</div>
 </main>
 </body>
 </html>
+
+

@@ -3,289 +3,95 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Backup and Restore — Cog Documentation</title>
-<style>
-:root {
-  --sidebar-w: 260px;
-  --fg: #1a1a2e;
-  --bg: #fff;
-  --sidebar-bg: #f5f6f8;
-  --sidebar-border: #e0e0e0;
-  --link: #2563eb;
-  --link-hover: #1d4ed8;
-  --active-bg: #e0e7ff;
-  --active-fg: #1e40af;
-  --code-bg: #f4f4f5;
-  --pre-bg: #272822;
-  --pre-fg: #f8f8f2;
-  --table-border: #d1d5db;
-  --table-stripe: #f9fafb;
-  --heading: #111827;
-  --muted: #6b7280;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --fg: #e5e7eb;
-    --bg: #111827;
-    --sidebar-bg: #1f2937;
-    --sidebar-border: #374151;
-    --link: #60a5fa;
-    --link-hover: #93bbfd;
-    --active-bg: #1e3a5f;
-    --active-fg: #93bbfd;
-    --code-bg: #1f2937;
-    --pre-bg: #0d1117;
-    --pre-fg: #e6edf3;
-    --table-border: #374151;
-    --table-stripe: #1f2937;
-    --heading: #f9fafb;
-    --muted: #9ca3af;
-  }
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  color: var(--fg);
-  background: var(--bg);
-  line-height: 1.6;
-}
-a { color: var(--link); text-decoration: none; }
-a:hover { color: var(--link-hover); text-decoration: underline; }
-
- 
-.sidebar {
-  position: fixed; top: 0; left: 0; bottom: 0;
-  width: var(--sidebar-w);
-  background: var(--sidebar-bg);
-  border-right: 1px solid var(--sidebar-border);
-  overflow-y: auto;
-  padding: 1.5rem 0;
-  z-index: 10;
-}
-.content {
-  margin-left: var(--sidebar-w);
-  max-width: 52rem;
-  padding: 2rem 2.5rem;
-}
-
- 
-.sidebar .logo {
-  padding: 0 1.25rem 1rem;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--heading);
-}
-.sidebar .logo a { color: inherit; }
-.sidebar .section-label {
-  padding: 0.75rem 1.25rem 0.25rem;
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--muted);
-}
-.sidebar ul { list-style: none; }
-.sidebar li a {
-  display: block;
-  padding: 0.25rem 1.25rem 0.25rem 1.75rem;
-  font-size: 0.875rem;
-  color: var(--fg);
-  border-left: 3px solid transparent;
-}
-.sidebar li a:hover {
-  background: var(--active-bg);
-  text-decoration: none;
-}
-.sidebar li a.active {
-  background: var(--active-bg);
-  color: var(--active-fg);
-  border-left-color: var(--active-fg);
-  font-weight: 600;
-}
-
- 
-.menu-toggle { display: none; }
-@media (max-width: 768px) {
-  .sidebar { transform: translateX(-100%); transition: transform 0.2s; }
-  .sidebar.open { transform: translateX(0); }
-  .content { margin-left: 0; padding: 1rem; }
-  .menu-toggle {
-    display: block; position: fixed; top: 0.75rem; left: 0.75rem;
-    z-index: 20; background: var(--sidebar-bg); border: 1px solid var(--sidebar-border);
-    border-radius: 4px; padding: 0.4rem 0.6rem; cursor: pointer;
-    font-size: 1.25rem; color: var(--fg); line-height: 1;
-  }
-}
-
- 
-.content h1 { font-size: 2rem; margin: 0 0 1rem; color: var(--heading); }
-.content h2 { font-size: 1.4rem; margin: 2rem 0 0.75rem; color: var(--heading); border-bottom: 1px solid var(--sidebar-border); padding-bottom: 0.3rem; }
-.content h3 { font-size: 1.15rem; margin: 1.5rem 0 0.5rem; color: var(--heading); }
-.content h4 { font-size: 1rem; margin: 1.25rem 0 0.5rem; color: var(--heading); }
-.content p { margin: 0.75rem 0; }
-.content ul, .content ol { margin: 0.75rem 0; padding-left: 1.5rem; }
-.content li { margin: 0.25rem 0; }
-.content blockquote {
-  border-left: 3px solid var(--link);
-  padding: 0.5rem 1rem;
-  margin: 1rem 0;
-  color: var(--muted);
-  background: var(--code-bg);
-}
-.content code {
-  background: var(--code-bg);
-  padding: 0.15em 0.35em;
-  border-radius: 3px;
-  font-size: 0.9em;
-}
-.content pre {
-  background: var(--pre-bg);
-  color: var(--pre-fg);
-  padding: 1rem;
-  border-radius: 6px;
-  overflow-x: auto;
-  margin: 1rem 0;
-  line-height: 1.5;
-}
-.content pre code {
-  background: none;
-  padding: 0;
-  font-size: 0.85rem;
-}
-.content table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 1rem 0;
-  font-size: 0.9rem;
-}
-.content th, .content td {
-  border: 1px solid var(--table-border);
-  padding: 0.5rem 0.75rem;
-  text-align: left;
-}
-.content th { background: var(--sidebar-bg); font-weight: 600; }
-.content tr:nth-child(even) { background: var(--table-stripe); }
-.content hr { border: none; border-top: 1px solid var(--sidebar-border); margin: 2rem 0; }
-.content img { max-width: 100%; }
-</style>
+<title>Backup and Restore — Cog docs</title>
+<link rel="stylesheet" href="../static/style.css">
+<link rel="icon" href="../static/favicon.svg" type="image/svg+xml">
+<script src="../static/cog.js"></script>
+<script src="../static/docs-search.js" defer></script>
 </head>
-<body>
-<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
-<nav class="sidebar">
-  <div class="logo"><a href="../index.html">Cog</a></div>
-  
-  <div class="section-label">Getting Started</div>
-  <ul>
-    
-    <li><a href="../getting-started/configuration.html">Configuration</a></li>
-    
-    <li><a href="../getting-started/first-run.html">First Run</a></li>
-    
-    <li><a href="../getting-started/installation.html">Installation</a></li>
-    
-  </ul>
-  
-  <div class="section-label">Administration</div>
-  <ul>
-    
-    <li><a href="../admin/backup.html" class="active">Backup and Restore</a></li>
-    
-    <li><a href="../admin/cli.html">CLI Reference</a></li>
-    
-    <li><a href="../admin/email.html">Email Configuration</a></li>
-    
-    <li><a href="../admin/https.html">Reaching Cog from Anywhere</a></li>
-    
-    <li><a href="../admin/reverse-proxy.html">Reverse Proxy</a></li>
-    
-    <li><a href="../admin/updates.html">Updates</a></li>
-    
-    <li><a href="../admin/users-and-groups.html">Users and Groups</a></li>
-    
-    <li><a href="../admin/volumes.html">Volumes</a></li>
-    
-  </ul>
-  
-  <div class="section-label">Using Cog</div>
-  <ul>
-    
-    <li><a href="../using-cog/app-passwords.html">App Passwords</a></li>
-    
-    <li><a href="../using-cog/files.html">Files</a></li>
-    
-    <li><a href="../using-cog/mfa.html">Multi-Factor Authentication</a></li>
-    
-    <li><a href="../using-cog/sftp.html">SFTP</a></li>
-    
-    <li><a href="../using-cog/search.html">Search</a></li>
-    
-    <li><a href="../using-cog/sharing.html">Sharing</a></li>
-    
-    <li><a href="../using-cog/webdav.html">WebDAV</a></li>
-    
-  </ul>
-  
-  <div class="section-label">Apps</div>
-  <ul>
-    
-    <li><a href="../apps/bookmarks.html">Bookmarks</a></li>
-    
-    <li><a href="../apps/calendar.html">Calendar</a></li>
-    
-    <li><a href="../apps/contacts.html">Contacts</a></li>
-    
-    <li><a href="../apps/dashboard.html">Dashboard</a></li>
-    
-    <li><a href="../apps/gallery.html">Gallery</a></li>
-    
-    <li><a href="../apps/notes.html">Notes</a></li>
-    
-    <li><a href="../apps/rss.html">RSS / News</a></li>
-    
-    <li><a href="../apps/tasks.html">Tasks</a></li>
-    
-  </ul>
-  
-  <div class="section-label">NextCloud</div>
-  <ul>
-    
-    <li><a href="../nextcloud/clients.html">Compatible Clients</a></li>
-    
-    <li><a href="../nextcloud/login-flow.html">Login Flow v2</a></li>
-    
-    <li><a href="../nextcloud/overview.html">NextCloud Compatibility</a></li>
-    
-  </ul>
-  
-  <div class="section-label">Plugin Development</div>
-  <ul>
-    
-    <li><a href="../plugins/cli-commands.html">CLI Commands</a></li>
-    
-    <li><a href="../plugins/custom-builds.html">Custom Builds</a></li>
-    
-    <li><a href="../plugins/getting-started.html">Getting Started with Plugin Development</a></li>
-    
-    <li><a href="../plugins/databases.html">Plugin Databases</a></li>
-    
-    <li><a href="../plugins/plugin-interface.html">Plugin Interface Reference</a></li>
-    
-    <li><a href="../plugins/overview.html">Plugin System Overview</a></li>
-    
-    <li><a href="../plugins/registration.html">Registration</a></li>
-    
-    <li><a href="../plugins/search.html">Search Indexing</a></li>
-    
-    <li><a href="../plugins/settings.html">Settings Pages</a></li>
-    
-    <li><a href="../plugins/sharing.html">Sharing Resources</a></li>
-    
-    <li><a href="../plugins/grpc-plugins.html">gRPC Plugins</a></li>
-    
-  </ul>
-  
+<body class="docs">
+<nav class="navbar" aria-label="Main">
+	<a class="navbar-brand" href="../index.html" aria-label="Cog docs home">
+		<img src="../static/favicon.svg" width="20" height="20" alt="">
+		<span class="brand-text">Cog docs</span>
+	</a>
+	<div class="navbar-spacer"></div>
+	<div class="navbar-search" role="search">
+		<label class="sr-only" for="search-box">Search the docs</label>
+		<input type="search" id="search-box" class="form-control search-input" placeholder="Search the docs (/)…" autocomplete="off" aria-controls="search-results" data-docs-index="../search.json" data-docs-root="../">
+		<div id="search-results" class="search-results" aria-live="polite"></div>
+	</div>
+	<button type="button" class="btn-icon search-toggle" data-search-open aria-label="Search" aria-expanded="false" aria-controls="search-box">
+		<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+	</button>
+	<div class="navbar-end">
+		<a class="btn btn-primary btn-sm" href="https://github.com/cog-app/cog/releases/latest">Download</a>
+	</div>
 </nav>
 <main class="content">
+	<div class="sidebar-layout">
+<nav class="sidebar docs-sidebar" aria-label="Documentation">
+			<a href="../index.html" class="sidebar-item">Overview</a>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">Getting started</summary>
+			<a href="../getting-started/configuration.html" class="sidebar-item">Configuration</a>
+			<a href="../getting-started/first-run.html" class="sidebar-item">First Run</a>
+			<a href="../getting-started/installation.html" class="sidebar-item">Installation</a>
+	</details>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">Using Cog</summary>
+			<a href="../using-cog/app-passwords.html" class="sidebar-item">App Passwords</a>
+			<a href="../using-cog/files.html" class="sidebar-item">Files</a>
+			<a href="../using-cog/mfa.html" class="sidebar-item">Multi-Factor Authentication</a>
+			<a href="../using-cog/sftp.html" class="sidebar-item">SFTP</a>
+			<a href="../using-cog/search.html" class="sidebar-item">Search</a>
+			<a href="../using-cog/sharing.html" class="sidebar-item">Sharing</a>
+			<a href="../using-cog/webdav.html" class="sidebar-item">WebDAV</a>
+	</details>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">Apps</summary>
+			<a href="../apps/bookmarks.html" class="sidebar-item">Bookmarks</a>
+			<a href="../apps/calendar.html" class="sidebar-item">Calendar</a>
+			<a href="../apps/contacts.html" class="sidebar-item">Contacts</a>
+			<a href="../apps/dashboard.html" class="sidebar-item">Dashboard</a>
+			<a href="../apps/gallery.html" class="sidebar-item">Gallery</a>
+			<a href="../apps/notes.html" class="sidebar-item">Notes</a>
+			<a href="../apps/rss.html" class="sidebar-item">RSS / News</a>
+			<a href="../apps/tasks.html" class="sidebar-item">Tasks</a>
+	</details>
+	<details class="sidebar-section" open>
+		<summary class="sidebar-heading">Administration</summary>
+			<a href="../admin/backup.html" class="sidebar-item active" aria-current="page">Backup and Restore</a>
+			<a href="../admin/cli.html" class="sidebar-item">CLI Reference</a>
+			<a href="../admin/email.html" class="sidebar-item">Email Configuration</a>
+			<a href="../admin/https.html" class="sidebar-item">Reaching Cog from Anywhere</a>
+			<a href="../admin/reverse-proxy.html" class="sidebar-item">Reverse Proxy</a>
+			<a href="../admin/updates.html" class="sidebar-item">Updates</a>
+			<a href="../admin/users-and-groups.html" class="sidebar-item">Users and Groups</a>
+			<a href="../admin/volumes.html" class="sidebar-item">Volumes</a>
+	</details>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">NextCloud</summary>
+			<a href="../nextcloud/clients.html" class="sidebar-item">Compatible Clients</a>
+			<a href="../nextcloud/login-flow.html" class="sidebar-item">Login Flow v2</a>
+			<a href="../nextcloud/overview.html" class="sidebar-item">NextCloud Compatibility</a>
+	</details>
+	<details class="sidebar-section">
+		<summary class="sidebar-heading">Plugin development</summary>
+			<a href="../plugins/cli-commands.html" class="sidebar-item">CLI Commands</a>
+			<a href="../plugins/custom-builds.html" class="sidebar-item">Custom Builds</a>
+			<a href="../plugins/getting-started.html" class="sidebar-item">Getting Started with Plugin Development</a>
+			<a href="../plugins/databases.html" class="sidebar-item">Plugin Databases</a>
+			<a href="../plugins/plugin-interface.html" class="sidebar-item">Plugin Interface Reference</a>
+			<a href="../plugins/overview.html" class="sidebar-item">Plugin System Overview</a>
+			<a href="../plugins/registration.html" class="sidebar-item">Registration</a>
+			<a href="../plugins/search.html" class="sidebar-item">Search Indexing</a>
+			<a href="../plugins/settings.html" class="sidebar-item">Settings Pages</a>
+			<a href="../plugins/sharing.html" class="sidebar-item">Sharing Resources</a>
+			<a href="../plugins/grpc-plugins.html" class="sidebar-item">gRPC Plugins</a>
+	</details>
+</nav>
+		<article class="sidebar-content prose docs-page">
 <h1 id="backup-and-restore">Backup and Restore</h1>
 <h2 id="what-to-back-up">What to back up</h2>
 <ol>
@@ -298,12 +104,12 @@ a:hover { color: var(--link-hover); text-decoration: underline; }
 <p><strong>Recommended approach:</strong> Stop Cog before backing up to ensure clean database state. If you need hot backups, copy the <code>.db</code>, <code>-wal</code>, and <code>-shm</code> files together atomically (e.g., using filesystem snapshots or <code>sqlite3 .backup</code>).</p>
 <p>Do not copy only the <code>.db</code> file while Cog is running -- you may get a corrupt backup if there are uncommitted WAL entries.</p>
 <h2 id="backup-script-example">Backup script example</h2>
-<pre tabindex="0" style="color:#f8f8f2;background-color:#272822;"><code><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e"># Stop cog, back up, restart</span>
+<pre tabindex="0" style="background-color:#fff;"><code><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#999;font-weight:bold;font-style:italic"></span><span style="color:#998;font-style:italic"># Stop cog, back up, restart</span>
 </span></span><span style="display:flex;"><span>systemctl stop cog
-</span></span><span style="display:flex;"><span>tar czf /backup/cog-<span style="color:#66d9ef">$(</span>date +%Y%m%d<span style="color:#66d9ef">)</span>.tar.gz <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    /var/lib/cog/system.db* <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    /var/lib/cog/data/
+</span></span><span style="display:flex;"><span>tar czf /backup/cog-<span style="color:#000;font-weight:bold">$(</span>date +%Y%m%d<span style="color:#000;font-weight:bold">)</span>.tar.gz <span style="color:#d14">\
+</span></span></span><span style="display:flex;"><span><span style="color:#d14"></span>    /var/lib/cog/system.db* <span style="color:#d14">\
+</span></span></span><span style="display:flex;"><span><span style="color:#d14"></span>    /var/lib/cog/data/
 </span></span><span style="display:flex;"><span>systemctl start cog
 </span></span></code></pre><h2 id="restore">Restore</h2>
 <ol>
@@ -313,6 +119,11 @@ a:hover { color: var(--link-hover); text-decoration: underline; }
 </ol>
 <p>Cog will run any pending migrations automatically on startup.</p>
 
+			<p class="docs-version">For Cog dev</p>
+		</article>
+	</div>
 </main>
 </body>
 </html>
+
+
