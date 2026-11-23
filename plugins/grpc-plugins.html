@@ -227,7 +227,6 @@
 <p>In Go, <code>plugcmd.Run</code> does this for you with recovery interceptors on both the unary and streaming methods. That covers panics raised while serving a request. It cannot cover a panic in a goroutine you started yourself — nothing outside that goroutine can recover it — so recover in your own goroutines. An implementation in another language needs the equivalent guard at its own service boundary.</p>
 <p><strong>Expect to be killed, and to be orphaned.</strong> The host kills the process when it shuts down cleanly. If the host itself is killed, nothing does: the plugin is left running with a socket directory under <code>/tmp</code> that no one will connect to again. Hold no state that a sudden exit would corrupt, and treat a fresh start as the normal case rather than the exceptional one.</p>
 
-			<p class="docs-version">For Cog dev</p>
 		</article>
 	</div>
 </main>
