@@ -397,7 +397,9 @@
     tray.notifications.forEach(function (a) {
       if (tray.seen !== null && a.id > tray.seen) count++;
     });
-    tray.badge.textContent = count > 99 ? "99+" : String(count);
+    // Empty, not "0", when there is nothing new: the badge then reads the
+    // same before the first poll as after it.
+    tray.badge.textContent = count === 0 ? "" : count > 99 ? "99+" : String(count);
     tray.badge.hidden = count === 0 || isOpen();
     tray.toggle.setAttribute("aria-label", count ? "Notifications (" + count + " new)" : "Notifications");
   }
